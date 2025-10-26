@@ -192,6 +192,10 @@ def insert_cell(filepath: str, cell_index: int, content: str, cell_type: str = "
     else:  # raw
         new_cell = nbformat.v4.new_raw_cell(content)
     
+    # Remove id field if notebook format doesn't support it
+    if 'id' in new_cell and nb.nbformat == 4 and nb.nbformat_minor < 5:
+        del new_cell['id']
+    
     nb['cells'].insert(cell_index, new_cell)
     write_notebook_file(filepath, nb)
 
@@ -218,6 +222,10 @@ def append_cell(filepath: str, content: str, cell_type: str = "code") -> None:
         new_cell = nbformat.v4.new_markdown_cell(content)
     else:  # raw
         new_cell = nbformat.v4.new_raw_cell(content)
+    
+    # Remove id field if notebook format doesn't support it
+    if 'id' in new_cell and nb.nbformat == 4 and nb.nbformat_minor < 5:
+        del new_cell['id']
     
     nb['cells'].append(new_cell)
     write_notebook_file(filepath, nb)
@@ -399,6 +407,10 @@ def insert_cells_batch(filepath: str, insertions: list[dict]) -> None:
             new_cell = nbformat.v4.new_markdown_cell(content)
         else:  # raw
             new_cell = nbformat.v4.new_raw_cell(content)
+        
+        # Remove id field if notebook format doesn't support it
+        if 'id' in new_cell and nb.nbformat == 4 and nb.nbformat_minor < 5:
+            del new_cell['id']
         
         nb['cells'].insert(cell_index, new_cell)
     
