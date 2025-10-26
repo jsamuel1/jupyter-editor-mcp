@@ -99,7 +99,7 @@ def replace_cell(filepath: str, cell_index: int, new_content: str) -> dict:
     Args:
         filepath: Path to .ipynb file (absolute path preferred)
         cell_index: Index of cell to replace
-        new_content: New content for cell
+        new_content: New content for cell (provide as raw string, no additional escaping needed)
         
     Returns:
         Dict with 'success' or 'error' key
@@ -122,7 +122,7 @@ def insert_cell(filepath: str, cell_index: int, content: str, cell_type: str = "
     Args:
         filepath: Path to .ipynb file (absolute path preferred)
         cell_index: Position to insert cell
-        content: Cell content
+        content: Cell content (provide as raw string, no additional escaping needed)
         cell_type: Type of cell ('code', 'markdown', 'raw')
         
     Returns:
@@ -146,7 +146,7 @@ def append_cell(filepath: str, content: str, cell_type: str = "code") -> dict:
     
     Args:
         filepath: Path to .ipynb file (absolute path preferred)
-        content: Cell content
+        content: Cell content (provide as raw string, no additional escaping needed)
         cell_type: Type of cell ('code', 'markdown', 'raw')
         
     Returns:
@@ -195,8 +195,8 @@ def str_replace_in_cell(filepath: str, cell_index: int, old_str: str, new_str: s
     Args:
         filepath: Path to .ipynb file (absolute path preferred)
         cell_index: Index of cell
-        old_str: String to replace
-        new_str: Replacement string
+        old_str: String to replace (provide as raw string, no additional escaping needed)
+        new_str: Replacement string (provide as raw string, no additional escaping needed)
         
     Returns:
         Dict with 'success' or 'error' key
@@ -301,6 +301,7 @@ def replace_cells_batch(filepath: str, replacements: list[dict]) -> dict:
     Args:
         filepath: Path to .ipynb file (absolute path preferred)
         replacements: List of dicts with 'cell_index' and 'content' keys
+                     (provide content as raw strings, no additional escaping needed)
         
     Returns:
         Dict with 'success' and 'cells_modified' or 'error' key
@@ -346,6 +347,7 @@ def insert_cells_batch(filepath: str, insertions: list[dict]) -> dict:
     Args:
         filepath: Path to .ipynb file (absolute path preferred)
         insertions: List of dicts with 'cell_index', 'content', 'cell_type' keys
+                   (provide content as raw strings, no additional escaping needed)
         
     Returns:
         Dict with 'success' and 'cells_inserted' or 'error' key
