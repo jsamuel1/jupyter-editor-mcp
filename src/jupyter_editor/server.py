@@ -14,7 +14,7 @@ def read_notebook(filepath: str) -> dict:
     """Read Jupyter notebook and return structure summary.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         
     Returns:
         Dictionary with cell_count, cell_types, kernel_info, format_version
@@ -33,7 +33,7 @@ def list_cells(filepath: str) -> dict:
     """List all cells with indices, types, and content previews.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         
     Returns:
         Dict with 'cells' list or 'error' key on failure
@@ -52,7 +52,7 @@ def get_cell(filepath: str, cell_index: int) -> dict:
     """Get content of specific cell by index.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         cell_index: Index of cell (supports negative indexing)
         
     Returns:
@@ -74,7 +74,7 @@ def search_cells(filepath: str, pattern: str, case_sensitive: bool = False) -> d
     """Search for pattern in cell content.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         pattern: Search pattern (regex supported)
         case_sensitive: Whether search is case-sensitive (default: False)
         
@@ -97,7 +97,7 @@ def replace_cell(filepath: str, cell_index: int, new_content: str) -> dict:
     """Replace entire cell content.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         cell_index: Index of cell to replace
         new_content: New content for cell
         
@@ -120,7 +120,7 @@ def insert_cell(filepath: str, cell_index: int, content: str, cell_type: str = "
     """Insert new cell at specified position.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         cell_index: Position to insert cell
         content: Cell content
         cell_type: Type of cell ('code', 'markdown', 'raw')
@@ -145,7 +145,7 @@ def append_cell(filepath: str, content: str, cell_type: str = "code") -> dict:
     """Append cell to end of notebook.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         content: Cell content
         cell_type: Type of cell ('code', 'markdown', 'raw')
         
@@ -170,7 +170,7 @@ def delete_cell(filepath: str, cell_index: int) -> dict:
     """Delete cell at specified index.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         cell_index: Index of cell to delete
         
     Returns:
@@ -193,7 +193,7 @@ def str_replace_in_cell(filepath: str, cell_index: int, old_str: str, new_str: s
     """Replace substring within cell content.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         cell_index: Index of cell
         old_str: String to replace
         new_str: Replacement string
@@ -221,7 +221,7 @@ def get_metadata(filepath: str, cell_index: int | None = None) -> dict:
     """Get notebook or cell metadata.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         cell_index: Index of cell (None for notebook metadata)
         
     Returns:
@@ -242,7 +242,7 @@ def update_metadata(filepath: str, metadata: dict, cell_index: int | None = None
     """Update notebook or cell metadata.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         metadata: Metadata dictionary to merge
         cell_index: Index of cell (None for notebook metadata)
         
@@ -265,7 +265,7 @@ def set_kernel(filepath: str, kernel_name: str, display_name: str, language: str
     """Set kernel specification.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         kernel_name: Kernel name (e.g., 'python3')
         display_name: Display name (e.g., 'Python 3')
         language: Programming language (default: 'python')
@@ -299,7 +299,7 @@ def replace_cells_batch(filepath: str, replacements: list[dict]) -> dict:
     """Replace multiple cells in one operation.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         replacements: List of dicts with 'cell_index' and 'content' keys
         
     Returns:
@@ -321,7 +321,7 @@ def delete_cells_batch(filepath: str, cell_indices: list[int]) -> dict:
     """Delete multiple cells by indices.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         cell_indices: List of cell indices to delete
         
     Returns:
@@ -344,7 +344,7 @@ def insert_cells_batch(filepath: str, insertions: list[dict]) -> dict:
     """Insert multiple cells at specified positions.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         insertions: List of dicts with 'cell_index', 'content', 'cell_type' keys
         
     Returns:
@@ -366,7 +366,7 @@ def search_replace_all(filepath: str, pattern: str, replacement: str, cell_type:
     """Search and replace across all cells.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         pattern: Pattern to search for (regex)
         replacement: Replacement string
         cell_type: Optional filter by cell type
@@ -388,7 +388,7 @@ def reorder_cells(filepath: str, new_order: list[int]) -> dict:
     """Reorder cells by providing new index mapping.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         new_order: List of indices in desired order
         
     Returns:
@@ -410,7 +410,7 @@ def filter_cells(filepath: str, cell_type: str | None = None, pattern: str | Non
     """Keep only cells matching criteria, delete others.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         cell_type: Optional filter by cell type
         pattern: Optional regex pattern to match
         
@@ -442,8 +442,8 @@ def merge_notebooks(output_filepath: str, input_filepaths: list[str], add_separa
     """Merge multiple notebooks into one.
     
     Args:
-        output_filepath: Path for merged notebook
-        input_filepaths: List of notebook paths to merge
+        output_filepath: Path for merged notebook (absolute path preferred)
+        input_filepaths: List of notebook paths to merge (absolute paths preferred)
         add_separators: Whether to add separator cells between notebooks
         
     Returns:
@@ -464,7 +464,7 @@ def split_notebook(filepath: str, output_dir: str, split_by: str = "markdown_hea
     """Split notebook into multiple files by criteria.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         output_dir: Directory for output files
         split_by: Split criteria ('markdown_headers' or 'cell_count')
         
@@ -487,7 +487,7 @@ def apply_to_notebooks(filepaths: list[str], operation: str, operation_params: d
     """Apply same operation to multiple notebooks.
     
     Args:
-        filepaths: List of notebook paths
+        filepaths: List of notebook paths (absolute paths preferred)
         operation: Operation name ('set_kernel', 'clear_outputs', 'update_metadata')
         operation_params: Parameters for the operation as a dictionary
         
@@ -510,7 +510,7 @@ def search_notebooks(filepaths: list[str], pattern: str, return_context: bool = 
     """Search across multiple notebooks.
     
     Args:
-        filepaths: List of notebook paths
+        filepaths: List of notebook paths (absolute paths preferred)
         pattern: Search pattern (regex)
         return_context: Whether to include context
         
@@ -529,7 +529,7 @@ def sync_metadata(filepaths: list[str], metadata: dict, merge: bool = False) -> 
     """Synchronize metadata across multiple notebooks.
     
     Args:
-        filepaths: List of notebook paths
+        filepaths: List of notebook paths (absolute paths preferred)
         metadata: Metadata to apply
         merge: Whether to merge with existing metadata
         
@@ -549,8 +549,8 @@ def extract_cells(output_filepath: str, input_filepaths: list[str],
     """Extract matching cells from multiple notebooks into new notebook.
     
     Args:
-        output_filepath: Path for output notebook
-        input_filepaths: List of source notebook paths
+        output_filepath: Path for output notebook (absolute path preferred)
+        input_filepaths: List of source notebook paths (absolute paths preferred)
         pattern: Optional regex pattern to match
         cell_type: Optional cell type filter
         
@@ -570,7 +570,7 @@ def clear_outputs(filepaths: str | list[str]) -> dict:
     """Clear all outputs from code cells in one or more notebooks.
     
     Args:
-        filepaths: Single filepath or list of filepaths
+        filepaths: Single filepath or list of filepaths (absolute paths preferred)
         
     Returns:
         Dict with 'success' and 'notebooks_processed' or 'error' key
@@ -592,7 +592,7 @@ def validate_notebook(filepath: str) -> dict:
     """Validate notebook structure.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         
     Returns:
         Dict with 'valid' boolean and optional 'errors' list
@@ -612,7 +612,7 @@ def get_notebook_info(filepath: str) -> dict:
     """Get summary information about notebook.
     
     Args:
-        filepath: Path to .ipynb file
+        filepath: Path to .ipynb file (absolute path preferred)
         
     Returns:
         Dict with cell_count, cell_types, kernel, format_version, file_size or 'error' key
@@ -630,7 +630,7 @@ def validate_notebooks_batch(filepaths: list[str]) -> dict:
     """Validate multiple notebooks.
     
     Args:
-        filepaths: List of notebook paths
+        filepaths: List of notebook paths (absolute paths preferred)
         
     Returns:
         Dict with 'results' mapping filepath to validation status
