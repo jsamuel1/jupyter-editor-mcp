@@ -1,10 +1,34 @@
 """MCP server for Jupyter Notebook editing."""
 
+import sys
+import argparse
+from importlib.metadata import metadata
 from fastmcp import FastMCP
 from . import operations
 from .utils import COMMON_KERNELS
 
-mcp = FastMCP(name="Jupyter Notebook Editor")
+# Get package metadata
+pkg_metadata = metadata("jupyter-editor-mcp")
+__version__ = pkg_metadata["Version"]
+
+# Extract URLs from metadata
+_project_urls = {
+    url.split(", ")[0]: url.split(", ")[1]
+    for url in pkg_metadata.get_all("Project-URL") or []
+}
+__github_url__ = _project_urls.get("Repository", "")
+__pypi_url__ = _project_urls.get("PyPI", "")
+
+mcp = FastMCP(
+    name="Jupyter Notebook Editor",
+    version=__version__,
+    website_url=__github_url__,
+    instructions="""Use the tools from this server to edit Jupyter notebooks (.ipynb) programmatically while preserving structure.
+
+Use these tools instead of JSON editors or file read/write operations to avoid breaking notebook format.
+
+Capabilities: read, modify cells, batch operations, search/replace, metadata management, validation."""
+)
 
 
 # Read Operations
@@ -662,7 +686,66 @@ def validate_notebooks_batch(filepaths: list[str]) -> dict:
 
 def main():
     """Entry point for the MCP server."""
-    mcp.run()
+    parser = argparse.ArgumentParser(
+        prog="jupyter-editor-mcp",
+        description="MCP server for programmatic Jupyter notebook editing",
+        epilog=f"GitHub: {__github_url__}\nPyPI: {__pypi_url__}",
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}\nGitHub: {__github_url__}\nPyPI: {__pypi_url__}"
+    )
+    parser.add_argument(
+        "--transport",
+        choices=["stdio", "http"],
+        default="stdio",
+        help="Transport protocol (default: stdio)"
+    )
+    parser.add_argument(
+        "--host",
+        default="127.0.0.1",
+        help="Host for HTTP transport (default: 127.0.0.1)"
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="Port for HTTP transport (default: 8000)"
+    )
+    parser.add_argument(
+        "--path",
+        default="/mcp",
+        help="Path for HTTP transport (default: /mcp)"
+    )
+    parser.add_argument(
+        "--no-banner",
+        action="store_true",
+        help="Disable startup banner"
+    )
+    parser.add_argument(
+        "--project",
+        help="Project directory to scope file operations"
+    )
+    
+    args = parser.parse_args()
+    
+    # Set project scope if provided
+    if args.project:
+        operations.set_project_scope(args.project)
+    
+    # Run with appropriate transport
+    if args.transport == "stdio":
+        mcp.run(transport="stdio", show_banner=not args.no_banner)
+    else:
+        mcp.run(
+            transport="http",
+            http_host=args.host,
+            http_port=args.port,
+            http_path=args.path,
+            show_banner=not args.no_banner
+        )
 
 
 if __name__ == "__main__":

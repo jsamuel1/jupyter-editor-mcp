@@ -4,6 +4,43 @@ import nbformat
 from pathlib import Path
 import re
 
+# Project scope for file operations
+_project_scope: Path | None = None
+
+
+def set_project_scope(project_dir: str) -> None:
+    """Set project directory to scope file operations.
+    
+    Args:
+        project_dir: Path to project directory
+        
+    Raises:
+        ValueError: If directory doesn't exist
+    """
+    global _project_scope
+    path = Path(project_dir).resolve()
+    if not path.is_dir():
+        raise ValueError(f"Project directory does not exist: {project_dir}")
+    _project_scope = path
+
+
+def _validate_filepath(filepath: str) -> Path:
+    """Validate filepath is within project scope if set.
+    
+    Args:
+        filepath: Path to validate
+        
+    Returns:
+        Resolved Path object
+        
+    Raises:
+        ValueError: If filepath is outside project scope
+    """
+    path = Path(filepath).resolve()
+    if _project_scope and not path.is_relative_to(_project_scope):
+        raise ValueError(f"File access denied: {filepath} is outside project scope {_project_scope}")
+    return path
+
 
 def read_notebook_file(filepath: str) -> nbformat.NotebookNode:
     """Read notebook file and return NotebookNode.
@@ -16,9 +53,10 @@ def read_notebook_file(filepath: str) -> nbformat.NotebookNode:
         
     Raises:
         FileNotFoundError: If file doesn't exist
-        ValueError: If file is not valid notebook
+        ValueError: If file is not valid notebook or outside project scope
     """
-    with open(filepath, 'r', encoding='utf-8') as f:
+    path = _validate_filepath(filepath)
+    with open(path, 'r', encoding='utf-8') as f:
         return nbformat.read(f, as_version=4)
 
 
@@ -31,12 +69,14 @@ def write_notebook_file(filepath: str, nb: nbformat.NotebookNode) -> None:
         
     Raises:
         ValidationError: If notebook is invalid
+        ValueError: If filepath is outside project scope
     """
+    path = _validate_filepath(filepath)
     nbformat.validate(nb)
-    temp_path = f"{filepath}.tmp"
+    temp_path = f"{path}.tmp"
     with open(temp_path, 'w', encoding='utf-8') as f:
         nbformat.write(nb, f)
-    Path(temp_path).rename(filepath)
+    Path(temp_path).rename(path)
 
 
 def get_notebook_summary(filepath: str) -> dict:

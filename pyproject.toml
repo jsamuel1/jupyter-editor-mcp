@@ -30,6 +30,7 @@ Homepage = "https://github.com/jsamuel1/jupyter-editor-mcp"
 Documentation = "https://github.com/jsamuel1/jupyter-editor-mcp#readme"
 Repository = "https://github.com/jsamuel1/jupyter-editor-mcp"
 Issues = "https://github.com/jsamuel1/jupyter-editor-mcp/issues"
+PyPI = "https://pypi.org/project/jupyter-editor-mcp/"
 
 [project.scripts]
 jupyter-editor-mcp = "jupyter_editor.server:main"
