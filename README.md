@@ -12,11 +12,17 @@ A Model Context Protocol (MCP) server for programmatically editing Jupyter noteb
 
 ## Installation
 
+### One-Click Install
+
+[![Install in Kiro](https://img.shields.io/badge/Kiro-Install-FF6B35?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJMMiAyMkgyMkwxMiAyWiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+&logoColor=white)](https://kiro.dev/mcp/install?name=jupyter-editor&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22jupyter-editor-mcp%22%5D%7D)
+
+[![Install in Claude Desktop](https://img.shields.io/badge/Claude_Desktop-Install-5865F2?style=for-the-badge&logo=anthropic&logoColor=white)](https://claude.ai/mcp/install?name=jupyter-editor&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22jupyter-editor-mcp%22%5D%7D)
+
 ### Quick Start
 
 ```bash
 # Install as a tool
-uv tool install .
+uv tool install jupyter-editor-mcp
 
 # Run the server
 jupyter-editor-mcp
