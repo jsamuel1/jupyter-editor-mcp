@@ -4,6 +4,15 @@ import pytest
 import nbformat
 import tempfile
 from pathlib import Path
+from src.jupyter_editor import operations
+
+
+@pytest.fixture(autouse=True)
+def reset_project_scope():
+    """Reset project scope before each test."""
+    operations._project_scope = None
+    yield
+    operations._project_scope = None
 
 
 @pytest.fixture
@@ -20,6 +29,8 @@ def simple_notebook():
         'display_name': 'Python 3',
         'language': 'python'
     }
+    # Normalize to add missing IDs
+    nbformat.validate(nb)
     return nb
 
 

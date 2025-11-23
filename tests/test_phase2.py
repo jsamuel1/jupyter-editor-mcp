@@ -2,7 +2,7 @@
 
 import pytest
 import nbformat
-from jupyter_editor import operations
+from src.jupyter_editor import operations
 
 
 # Cell Modification Tests

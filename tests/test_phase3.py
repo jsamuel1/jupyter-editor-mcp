@@ -3,7 +3,7 @@
 import pytest
 import nbformat
 from pathlib import Path
-from jupyter_editor import operations
+from src.jupyter_editor import operations
 
 
 # Multi-Cell Batch Operations

@@ -27,7 +27,9 @@ mcp = FastMCP(
 
 Use these tools instead of JSON editors or file read/write operations to avoid breaking notebook format.
 
-Capabilities: read, modify cells, batch operations, search/replace, metadata management, validation."""
+Capabilities: read, modify cells, batch operations, search/replace, metadata management, validation.
+
+Best Practice: Prompt users to clear notebook outputs using clear_outputs() before committing to git to prevent information leakage, reduce file size, and avoid merge conflicts."""
 )
 
 
@@ -145,12 +147,15 @@ def insert_cell(filepath: str, cell_index: int, content: str, cell_type: str = "
     
     Args:
         filepath: Path to .ipynb file (absolute path preferred)
-        cell_index: Position to insert cell
+        cell_index: Position to insert cell (0-based indexing)
         content: Cell content (provide as raw string, no additional escaping needed)
         cell_type: Type of cell ('code', 'markdown', 'raw')
         
     Returns:
         Dict with 'success' and 'new_cell_count' or 'error' key
+        
+    Note:
+        Indices of cells at or after the insertion point will shift by +1
     """
     try:
         operations.insert_cell(filepath, cell_index, content, cell_type)
@@ -174,7 +179,7 @@ def append_cell(filepath: str, content: str, cell_type: str = "code") -> dict:
         cell_type: Type of cell ('code', 'markdown', 'raw')
         
     Returns:
-        Dict with 'success' and 'cell_index' or 'error' key
+        Dict with 'success' and 'cell_index' or 'error' key (0-based index of new cell)
     """
     try:
         nb = operations.read_notebook_file(filepath)
@@ -195,10 +200,13 @@ def delete_cell(filepath: str, cell_index: int) -> dict:
     
     Args:
         filepath: Path to .ipynb file (absolute path preferred)
-        cell_index: Index of cell to delete
+        cell_index: Index of cell to delete (0-based indexing)
         
     Returns:
         Dict with 'success' and 'new_cell_count' or 'error' key
+        
+    Note:
+        Indices of cells after the deleted cell will shift by -1
     """
     try:
         operations.delete_cell(filepath, cell_index)
@@ -347,10 +355,14 @@ def delete_cells_batch(filepath: str, cell_indices: list[int]) -> dict:
     
     Args:
         filepath: Path to .ipynb file (absolute path preferred)
-        cell_indices: List of cell indices to delete
+        cell_indices: List of cell indices to delete (0-based indexing)
         
     Returns:
         Dict with 'success', 'cells_deleted', 'new_cell_count' or 'error' key
+        
+    Note:
+        Deletions are processed in descending order to maintain index validity.
+        Provide indices as they appear before any deletions occur.
     """
     try:
         operations.delete_cells_batch(filepath, cell_indices)
@@ -375,6 +387,11 @@ def insert_cells_batch(filepath: str, insertions: list[dict]) -> dict:
         
     Returns:
         Dict with 'success' and 'cells_inserted' or 'error' key
+        
+    Note:
+        Uses 0-based indexing. Insertions are processed in order, so later indices
+        will be affected by earlier insertions. Consider sorting by index descending
+        to maintain intended positions.
     """
     try:
         operations.insert_cells_batch(filepath, insertions)
@@ -415,7 +432,7 @@ def reorder_cells(filepath: str, new_order: list[int]) -> dict:
     
     Args:
         filepath: Path to .ipynb file (absolute path preferred)
-        new_order: List of indices in desired order
+        new_order: List of indices in desired order (0-based indexing)
         
     Returns:
         Dict with 'success' or 'error' key
@@ -741,9 +758,9 @@ def main():
     else:
         mcp.run(
             transport="http",
-            http_host=args.host,
-            http_port=args.port,
-            http_path=args.path,
+            host=args.host,
+            port=args.port,
+            path=args.path,
             show_banner=not args.no_banner
         )
 
