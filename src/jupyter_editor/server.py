@@ -37,10 +37,10 @@ Best Practice: Prompt users to clear notebook outputs using clear_outputs() befo
 
 @mcp.tool
 def read_notebook(filepath: str) -> dict:
-    """Read Jupyter notebook and return structure summary.
+    """Read a Jupyter Notebook (.ipynb) and return structure summary.
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         
     Returns:
         Dictionary with cell_count, cell_types, kernel_info, format_version
@@ -56,10 +56,10 @@ def read_notebook(filepath: str) -> dict:
 
 @mcp.tool
 def list_cells(filepath: str) -> dict:
-    """List all cells with indices, types, and content previews.
+    """List all cells in a Jupyter Notebook (.ipynb) with indices, types, and content previews.
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         
     Returns:
         Dict with 'cells' list or 'error' key on failure
@@ -75,10 +75,10 @@ def list_cells(filepath: str) -> dict:
 
 @mcp.tool
 def get_cell(filepath: str, cell_index: int) -> dict:
-    """Get content of specific cell by index.
+    """Get content of a specific cell by index from a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Index of cell (supports negative indexing)
         
     Returns:
@@ -97,10 +97,10 @@ def get_cell(filepath: str, cell_index: int) -> dict:
 
 @mcp.tool
 def search_cells(filepath: str, pattern: str, case_sensitive: bool = False) -> dict:
-    """Search for pattern in cell content.
+    """Search for pattern in cell content of a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         pattern: Search pattern (regex supported)
         case_sensitive: Whether search is case-sensitive (default: False)
         
@@ -120,10 +120,10 @@ def search_cells(filepath: str, pattern: str, case_sensitive: bool = False) -> d
 
 @mcp.tool
 def replace_cell(filepath: str, cell_index: int, new_content: str) -> dict:
-    """Replace entire cell content.
+    """Replace entire cell content in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Index of cell to replace
         new_content: New content for cell (provide as raw string, no additional escaping needed)
         
@@ -143,10 +143,10 @@ def replace_cell(filepath: str, cell_index: int, new_content: str) -> dict:
 
 @mcp.tool
 def insert_cell(filepath: str, cell_index: int, content: str, cell_type: str = "code") -> dict:
-    """Insert new cell at specified position.
+    """Insert new cell at specified position in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Position to insert cell (0-based indexing)
         content: Cell content (provide as raw string, no additional escaping needed)
         cell_type: Type of cell ('code', 'markdown', 'raw')
@@ -171,10 +171,10 @@ def insert_cell(filepath: str, cell_index: int, content: str, cell_type: str = "
 
 @mcp.tool
 def append_cell(filepath: str, content: str, cell_type: str = "code") -> dict:
-    """Append cell to end of notebook.
+    """Append cell to end of a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         content: Cell content (provide as raw string, no additional escaping needed)
         cell_type: Type of cell ('code', 'markdown', 'raw')
         
@@ -196,10 +196,10 @@ def append_cell(filepath: str, content: str, cell_type: str = "code") -> dict:
 
 @mcp.tool
 def delete_cell(filepath: str, cell_index: int) -> dict:
-    """Delete cell at specified index.
+    """Delete cell at specified index in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Index of cell to delete (0-based indexing)
         
     Returns:
@@ -222,10 +222,10 @@ def delete_cell(filepath: str, cell_index: int) -> dict:
 
 @mcp.tool
 def str_replace_in_cell(filepath: str, cell_index: int, old_str: str, new_str: str) -> dict:
-    """Replace substring within cell content.
+    """Replace substring within cell content in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Index of cell
         old_str: String to replace (provide as raw string, no additional escaping needed)
         new_str: Replacement string (provide as raw string, no additional escaping needed)
@@ -250,10 +250,10 @@ def str_replace_in_cell(filepath: str, cell_index: int, old_str: str, new_str: s
 
 @mcp.tool
 def get_metadata(filepath: str, cell_index: int | None = None) -> dict:
-    """Get notebook or cell metadata.
+    """Get Jupyter Notebook (.ipynb) or cell metadata.
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Index of cell (None for notebook metadata)
         
     Returns:
@@ -271,10 +271,10 @@ def get_metadata(filepath: str, cell_index: int | None = None) -> dict:
 
 @mcp.tool
 def update_metadata(filepath: str, metadata: dict, cell_index: int | None = None) -> dict:
-    """Update notebook or cell metadata.
+    """Update Jupyter Notebook (.ipynb) or cell metadata.
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         metadata: Metadata dictionary to merge
         cell_index: Index of cell (None for notebook metadata)
         
@@ -294,10 +294,10 @@ def update_metadata(filepath: str, metadata: dict, cell_index: int | None = None
 
 @mcp.tool
 def set_kernel(filepath: str, kernel_name: str, display_name: str, language: str = "python") -> dict:
-    """Set kernel specification.
+    """Set kernel specification for a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         kernel_name: Kernel name (e.g., 'python3')
         display_name: Display name (e.g., 'Python 3')
         language: Programming language (default: 'python')
@@ -316,7 +316,7 @@ def set_kernel(filepath: str, kernel_name: str, display_name: str, language: str
 
 @mcp.tool
 def list_available_kernels() -> dict:
-    """List common kernel configurations.
+    """List common Jupyter Notebook kernel configurations.
     
     Returns:
         Dict with 'kernels' list
@@ -328,10 +328,10 @@ def list_available_kernels() -> dict:
 
 @mcp.tool
 def replace_cells_batch(filepath: str, replacements: list[dict]) -> dict:
-    """Replace multiple cells in one operation.
+    """Replace multiple cells in one operation in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         replacements: List of dicts with 'cell_index' and 'content' keys
                      (provide content as raw strings, no additional escaping needed)
         
@@ -351,10 +351,10 @@ def replace_cells_batch(filepath: str, replacements: list[dict]) -> dict:
 
 @mcp.tool
 def delete_cells_batch(filepath: str, cell_indices: list[int]) -> dict:
-    """Delete multiple cells by indices.
+    """Delete multiple cells by indices from a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_indices: List of cell indices to delete (0-based indexing)
         
     Returns:
@@ -378,10 +378,10 @@ def delete_cells_batch(filepath: str, cell_indices: list[int]) -> dict:
 
 @mcp.tool
 def insert_cells_batch(filepath: str, insertions: list[dict]) -> dict:
-    """Insert multiple cells at specified positions.
+    """Insert multiple cells at specified positions in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         insertions: List of dicts with 'cell_index', 'content', 'cell_type' keys
                    (provide content as raw strings, no additional escaping needed)
         
@@ -406,10 +406,10 @@ def insert_cells_batch(filepath: str, insertions: list[dict]) -> dict:
 
 @mcp.tool
 def search_replace_all(filepath: str, pattern: str, replacement: str, cell_type: str | None = None) -> dict:
-    """Search and replace across all cells.
+    """Search and replace across all cells in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         pattern: Pattern to search for (regex)
         replacement: Replacement string
         cell_type: Optional filter by cell type
@@ -428,10 +428,10 @@ def search_replace_all(filepath: str, pattern: str, replacement: str, cell_type:
 
 @mcp.tool
 def reorder_cells(filepath: str, new_order: list[int]) -> dict:
-    """Reorder cells by providing new index mapping.
+    """Reorder cells in a Jupyter Notebook (.ipynb) by providing new index mapping.
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         new_order: List of indices in desired order (0-based indexing)
         
     Returns:
@@ -450,10 +450,10 @@ def reorder_cells(filepath: str, new_order: list[int]) -> dict:
 
 @mcp.tool
 def filter_cells(filepath: str, cell_type: str | None = None, pattern: str | None = None) -> dict:
-    """Keep only cells matching criteria, delete others.
+    """Keep only cells matching criteria in a Jupyter Notebook (.ipynb), delete others.
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_type: Optional filter by cell type
         pattern: Optional regex pattern to match
         
@@ -482,7 +482,7 @@ def filter_cells(filepath: str, cell_type: str | None = None, pattern: str | Non
 
 @mcp.tool
 def merge_notebooks(output_filepath: str, input_filepaths: list[str], add_separators: bool = True) -> dict:
-    """Merge multiple notebooks into one.
+    """Merge multiple Jupyter Notebooks (.ipynb) into one.
     
     Args:
         output_filepath: Path for merged notebook (absolute path preferred)
@@ -504,10 +504,10 @@ def merge_notebooks(output_filepath: str, input_filepaths: list[str], add_separa
 
 @mcp.tool
 def split_notebook(filepath: str, output_dir: str, split_by: str = "markdown_headers") -> dict:
-    """Split notebook into multiple files by criteria.
+    """Split a Jupyter Notebook (.ipynb) into multiple files by criteria.
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         output_dir: Directory for output files
         split_by: Split criteria ('markdown_headers' or 'cell_count')
         
@@ -527,7 +527,7 @@ def split_notebook(filepath: str, output_dir: str, split_by: str = "markdown_hea
 
 @mcp.tool
 def apply_to_notebooks(filepaths: list[str], operation: str, operation_params: dict | None = None) -> dict:
-    """Apply same operation to multiple notebooks.
+    """Apply same operation to multiple Jupyter Notebooks (.ipynb).
     
     Args:
         filepaths: List of notebook paths (absolute paths preferred)
@@ -550,7 +550,7 @@ def apply_to_notebooks(filepaths: list[str], operation: str, operation_params: d
 
 @mcp.tool
 def search_notebooks(filepaths: list[str], pattern: str, return_context: bool = True) -> dict:
-    """Search across multiple notebooks.
+    """Search across multiple Jupyter Notebooks (.ipynb).
     
     Args:
         filepaths: List of notebook paths (absolute paths preferred)
@@ -569,7 +569,7 @@ def search_notebooks(filepaths: list[str], pattern: str, return_context: bool = 
 
 @mcp.tool
 def sync_metadata(filepaths: list[str], metadata: dict, merge: bool = False) -> dict:
-    """Synchronize metadata across multiple notebooks.
+    """Synchronize metadata across multiple Jupyter Notebooks (.ipynb).
     
     Args:
         filepaths: List of notebook paths (absolute paths preferred)
@@ -589,7 +589,7 @@ def sync_metadata(filepaths: list[str], metadata: dict, merge: bool = False) -> 
 @mcp.tool
 def extract_cells(output_filepath: str, input_filepaths: list[str], 
                   pattern: str | None = None, cell_type: str | None = None) -> dict:
-    """Extract matching cells from multiple notebooks into new notebook.
+    """Extract matching cells from multiple Jupyter Notebooks (.ipynb) into a new notebook.
     
     Args:
         output_filepath: Path for output notebook (absolute path preferred)
@@ -610,7 +610,7 @@ def extract_cells(output_filepath: str, input_filepaths: list[str],
 
 @mcp.tool
 def clear_outputs(filepaths: str | list[str]) -> dict:
-    """Clear all outputs from code cells in one or more notebooks.
+    """Clear all outputs from code cells in one or more Jupyter Notebooks (.ipynb).
     
     Args:
         filepaths: Single filepath or list of filepaths (absolute paths preferred)
@@ -632,10 +632,10 @@ def clear_outputs(filepaths: str | list[str]) -> dict:
 
 @mcp.tool
 def validate_notebook(filepath: str) -> dict:
-    """Validate notebook structure.
+    """Validate Jupyter Notebook (.ipynb) structure.
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         
     Returns:
         Dict with 'valid' boolean and optional 'errors' list
@@ -652,10 +652,10 @@ def validate_notebook(filepath: str) -> dict:
 
 @mcp.tool
 def get_notebook_info(filepath: str) -> dict:
-    """Get summary information about notebook.
+    """Get summary information about a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to .ipynb file (absolute path preferred)
+        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         
     Returns:
         Dict with cell_count, cell_types, kernel, format_version, file_size or 'error' key
@@ -670,7 +670,7 @@ def get_notebook_info(filepath: str) -> dict:
 
 @mcp.tool
 def validate_notebooks_batch(filepaths: list[str]) -> dict:
-    """Validate multiple notebooks.
+    """Validate multiple Jupyter Notebooks (.ipynb).
     
     Args:
         filepaths: List of notebook paths (absolute paths preferred)
