@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.1.7] - 2026-01-02
+
+### Added
+- CONTRIBUTING.md with contribution guidelines
+- GitHub issue templates for bugs and feature requests
+- Test for search_replace_all count accuracy
+- Tests for package version functionality
+
+### Changed
+- Moved DESIGN.md, REQUIREMENTS.md, RESEARCH.md to docs/
+- Updated HTTP transport tests to use Streamable HTTP (MCP 2025-06-18 spec)
+- Version in __init__.py now reads from package metadata
+- Streamlined README installation section
+- Fixed URLs and path references across documentation
+
+### Fixed
+- search_replace_all now returns accurate replacement count
+- sync_metadata_across_notebooks removed unnecessary wrapper
+
+### Removed
+- TODO.md (implementation complete)
+
 ## [0.1.6] - 2026-01-02
 
 ### Added
