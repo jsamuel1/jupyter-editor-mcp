@@ -60,6 +60,27 @@ def test_search_replace_all(temp_notebook_file):
     nbformat.validate(operations.read_notebook_file(temp_notebook_file))
 
 
+def test_search_replace_all_count_accuracy(tmp_path):
+    """Test that search_replace_all returns accurate replacement count."""
+    nb = nbformat.v4.new_notebook()
+    nb['cells'] = [
+        nbformat.v4.new_code_cell("foo bar foo"),  # 2 occurrences
+        nbformat.v4.new_code_cell("foo"),           # 1 occurrence
+        nbformat.v4.new_markdown_cell("no match"),  # 0 occurrences
+    ]
+    filepath = str(tmp_path / "count_test.ipynb")
+    with open(filepath, 'w') as f:
+        nbformat.write(nb, f)
+    
+    count = operations.search_replace_all(filepath, "foo", "baz")
+    
+    assert count == 3  # Exact count verification
+    
+    nb = operations.read_notebook_file(filepath)
+    assert nb['cells'][0]['source'] == "baz bar baz"
+    assert nb['cells'][1]['source'] == "baz"
+
+
 def test_search_replace_all_with_cell_type_filter(temp_notebook_file):
     """Test search/replace with cell type filter."""
     count = operations.search_replace_all(temp_notebook_file, "Test", "Demo", cell_type="markdown")

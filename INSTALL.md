@@ -17,7 +17,7 @@ cd /path/to/jupyter-editor
 uv tool install .
 
 # Or install directly from git
-uv tool install git+https://github.com/yourusername/jupyter-editor.git
+uv tool install git+https://github.com/jsamuel1/jupyter-editor-mcp.git
 ```
 
 **Verify installation:**
@@ -34,8 +34,8 @@ This method installs the package in editable mode for development.
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd jupyter-editor
+git clone https://github.com/jsamuel1/jupyter-editor-mcp.git
+cd jupyter-editor-mcp
 
 # Create virtual environment
 uv venv
@@ -78,7 +78,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS)
       "args": [
         "run",
         "--directory",
-        "/path/to/jupyter-editor",
+        "/path/to/jupyter-editor-mcp",
         "python",
         "-m",
         "jupyter_editor.server"
@@ -111,13 +111,13 @@ Add to `.vscode/settings.json`:
 uv tool install --force .
 
 # Or from git
-uv tool install --force git+https://github.com/yourusername/jupyter-editor.git
+uv tool install --force git+https://github.com/jsamuel1/jupyter-editor-mcp.git
 ```
 
 ### Development Installation
 
 ```bash
-cd /path/to/jupyter-editor
+cd /path/to/jupyter-editor-mcp
 git pull
 uv pip install -e ".[dev]"
 ```
@@ -175,5 +175,5 @@ The server should start without errors and wait for connections.
 ## Next Steps
 
 - See [README.md](README.md) for usage examples
-- See [DESIGN.md](DESIGN.md) for API documentation
-- See [REQUIREMENTS.md](REQUIREMENTS.md) for feature details
+- See [docs/DESIGN.md](docs/DESIGN.md) for API documentation
+- See [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) for feature details

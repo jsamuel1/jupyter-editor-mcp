@@ -1,5 +1,49 @@
 # Changelog
 
+## [0.1.6] - 2026-01-02
+
+### Added
+- One-click install buttons for Kiro and Claude Desktop
+
+### Changed
+- Clarified tool descriptions apply to Jupyter Notebooks (.ipynb)
+- Updated to official Kiro badge and correct URL format
+- Updated dependencies
+
+## [0.1.5] - 2025-11-23
+
+### Fixed
+- Add contents write permission for release uploads
+
+## [0.1.4] - 2025-11-23
+
+### Added
+- CLI arguments and project scoping
+- Upload build artifacts to GitHub releases
+- PyPI publishing workflow and documentation
+
+### Changed
+- Improved tool descriptions and PyPI metadata
+- Updated dependencies
+
+## [0.1.3] - 2025-10-27
+
+### Changed
+- Clarified that cell content should be raw strings in documentation
+
+## [0.1.2] - 2025-10-27
+
+### Changed
+- Clarified that cell content should be raw strings
+
+## [0.1.1] - 2025-10-26
+
+### Fixed
+- Handle notebook format versions when inserting cells
+
+### Changed
+- Recommend absolute paths for all filepath parameters
+
 ## [0.1.0] - 2025-10-26
 
 ### Initial Release
@@ -67,7 +111,7 @@ Complete implementation of Jupyter Notebook Editor MCP Server with 29 specialize
 uv tool install --from /path/to/jupyter-editor .
 
 # Or install from git repository
-uv tool install git+https://github.com/yourusername/jupyter-editor.git
+uv tool install git+https://github.com/jsamuel1/jupyter-editor-mcp.git
 ```
 
 Run the server:
@@ -107,7 +151,7 @@ uv pip install -e ".[dev]"
       "args": [
         "run",
         "--directory",
-        "/path/to/jupyter-editor",
+        "/path/to/jupyter-editor-mcp",
         "python",
         "-m",
         "jupyter_editor.server"
@@ -120,10 +164,9 @@ uv pip install -e ".[dev]"
 ### Documentation
 
 - [README.md](README.md) - Overview and quick start
-- [RESEARCH.md](RESEARCH.md) - Technical research and specifications
-- [REQUIREMENTS.md](REQUIREMENTS.md) - User stories and acceptance criteria
-- [DESIGN.md](DESIGN.md) - Architecture and API design
-- [TODO.md](TODO.md) - Implementation progress (all phases complete)
+- [docs/RESEARCH.md](docs/RESEARCH.md) - Technical research and specifications
+- [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) - User stories and acceptance criteria
+- [docs/DESIGN.md](docs/DESIGN.md) - Architecture and API design
 
 ### Contributors
 

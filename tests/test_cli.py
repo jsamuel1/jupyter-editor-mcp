@@ -5,6 +5,22 @@ import sys
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 from src.jupyter_editor import operations
+from src import jupyter_editor
+
+
+class TestPackageVersion:
+    """Test package version functionality."""
+    
+    def test_version_matches_pyproject(self):
+        """Test that package version matches pyproject.toml."""
+        from importlib.metadata import version
+        expected = version("jupyter-editor-mcp")
+        assert jupyter_editor.__version__ == expected
+    
+    def test_version_format(self):
+        """Test that version follows semver format."""
+        import re
+        assert re.match(r'^\d+\.\d+\.\d+', jupyter_editor.__version__)
 
 
 class TestProjectScoping:
@@ -130,8 +146,10 @@ class TestCLIArguments:
         assert '--transport' in result.stdout
     
     def test_version_argument(self):
-        """Test --version displays version information."""
+        """Test --version displays correct version information."""
         import subprocess
+        from importlib.metadata import version
+        
         result = subprocess.run(
             ['uv', 'run', 'jupyter-editor-mcp', '--version'],
             capture_output=True,
@@ -139,5 +157,6 @@ class TestCLIArguments:
         )
         assert result.returncode == 0
         assert 'jupyter-editor-mcp' in result.stdout
+        assert version("jupyter-editor-mcp") in result.stdout
         assert 'GitHub:' in result.stdout
         assert 'PyPI:' in result.stdout

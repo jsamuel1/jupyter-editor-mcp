@@ -20,12 +20,14 @@ This project uses GitHub Actions to automatically publish to PyPI when a new rel
 
 ## Publishing a New Version
 
-1. **Update version** in `pyproject.toml`:
+1. **Update CHANGELOG.md** with the new version's changes
+
+2. **Update version** in `pyproject.toml`:
    ```toml
    version = "0.1.3"
    ```
 
-2. **Commit and push**:
+3. **Commit and push**:
    ```bash
    git add pyproject.toml
    git commit -m "chore: bump version to 0.1.3"

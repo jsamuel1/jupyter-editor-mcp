@@ -18,83 +18,35 @@ A Model Context Protocol (MCP) server for programmatically editing Jupyter noteb
 
 [![Install in Claude Code](https://img.shields.io/badge/Claude_Code-Install-5865F2?style=for-the-badge&logo=anthropic&logoColor=white)](https://claude.ai/mcp/install?name=jupyter-editor&config=%7B%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22jupyter-editor-mcp%22%5D%7D)
 
-### Quick Start
+### From PyPI
 
 ```bash
-# Install as a tool
 uv tool install jupyter-editor-mcp
-
-# Run the server
 jupyter-editor-mcp
 ```
 
-See [INSTALL.md](INSTALL.md) for detailed installation instructions and configuration options.
-
-### Option 1: Install as a Tool (Recommended)
-
-Install directly using `uv tool`:
+### From Source
 
 ```bash
-# Install from local directory
-uv tool install --from /path/to/jupyter-editor .
-
-# Or install from git repository
-uv tool install git+https://github.com/yourusername/jupyter-editor.git
-```
-
-Then run the server:
-
-```bash
-jupyter-editor-mcp
-```
-
-### Option 2: Development Installation
-
-For development or testing:
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd jupyter-editor
-
-# Create virtual environment and install
+git clone https://github.com/jsamuel1/jupyter-editor-mcp.git
+cd jupyter-editor-mcp
 uv venv
 uv pip install -e ".[dev]"
 ```
 
+See [INSTALL.md](INSTALL.md) for detailed configuration options.
+
 ## Usage
 
-### With Claude Desktop (Tool Installation)
+### With Claude Desktop
 
-If installed via `uv tool install`, add to your `claude_desktop_config.json`:
+Add to your `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "jupyter-editor": {
       "command": "jupyter-editor-mcp"
-    }
-  }
-}
-```
-
-### With Claude Desktop (Development Installation)
-
-If installed in development mode, add to your `claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "jupyter-editor": {
-      "command": "uv",
-      "args": [
-        "run",
-        "--directory",
-        "/path/to/jupyter-editor",
-        "python",
-        "-m",
-        "jupyter_editor.server"
-      ]
     }
   }
 }
@@ -146,10 +98,10 @@ uv pip install -e ".[dev]"
 
 ## Documentation
 
-- [RESEARCH.md](RESEARCH.md) - Technical research and tool specifications
-- [REQUIREMENTS.md](REQUIREMENTS.md) - User stories and acceptance criteria
-- [DESIGN.md](DESIGN.md) - Architecture and API design
-- [TODO.md](TODO.md) - Implementation progress tracking
+- [docs/RESEARCH.md](docs/RESEARCH.md) - Technical research and tool specifications
+- [docs/REQUIREMENTS.md](docs/REQUIREMENTS.md) - User stories and acceptance criteria
+- [docs/DESIGN.md](docs/DESIGN.md) - Architecture and API design
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
 
 ## License
 

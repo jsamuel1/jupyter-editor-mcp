@@ -148,20 +148,18 @@ class TestMCPTransports:
     
     @pytest.mark.asyncio
     async def test_http_transport(self, http_harness):
-        """Test server with HTTP transport."""
+        """Test server with Streamable HTTP transport."""
         http_harness.start(["--no-banner"])
         
         # Give server time to start
         await asyncio.sleep(1)
         
-        # Use MCP client with SSE
         from mcp import ClientSession
-        from mcp.client.sse import sse_client
+        from mcp.client.streamable_http import streamable_http_client
         
-        # FastMCP SSE endpoint is at base_url/sse
-        url = f"http://{http_harness.host}:{http_harness.port}{http_harness.path}/sse"
+        url = f"http://{http_harness.host}:{http_harness.port}{http_harness.path}"
         
-        async with sse_client(url) as (read, write):
+        async with streamable_http_client(url) as (read, write, _):
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 tools = await session.list_tools()
@@ -175,7 +173,7 @@ class TestMCPTransports:
     
     @pytest.mark.asyncio
     async def test_custom_http_port(self):
-        """Test HTTP transport with custom port."""
+        """Test Streamable HTTP transport with custom port."""
         harness = MCPTestHarness(transport="http", port=8002)
         harness.start(["--no-banner"])
         
@@ -183,11 +181,11 @@ class TestMCPTransports:
         
         try:
             from mcp import ClientSession
-            from mcp.client.sse import sse_client
+            from mcp.client.streamable_http import streamable_http_client
             
-            url = f"http://{harness.host}:{harness.port}{harness.path}/sse"
+            url = f"http://{harness.host}:{harness.port}{harness.path}"
             
-            async with sse_client(url) as (read, write):
+            async with streamable_http_client(url) as (read, write, _):
                 async with ClientSession(read, write) as session:
                     await session.initialize()
                     tools = await session.list_tools()
@@ -197,7 +195,7 @@ class TestMCPTransports:
     
     @pytest.mark.asyncio
     async def test_custom_http_path(self):
-        """Test HTTP transport with custom path."""
+        """Test Streamable HTTP transport with custom path."""
         harness = MCPTestHarness(transport="http", port=8003, path="/custom")
         harness.start(["--no-banner"])
         
@@ -205,11 +203,11 @@ class TestMCPTransports:
         
         try:
             from mcp import ClientSession
-            from mcp.client.sse import sse_client
+            from mcp.client.streamable_http import streamable_http_client
             
-            url = f"http://{harness.host}:{harness.port}{harness.path}/sse"
+            url = f"http://{harness.host}:{harness.port}{harness.path}"
             
-            async with sse_client(url) as (read, write):
+            async with streamable_http_client(url) as (read, write, _):
                 async with ClientSession(read, write) as session:
                     await session.initialize()
                     tools = await session.list_tools()

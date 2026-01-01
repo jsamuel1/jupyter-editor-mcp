@@ -479,11 +479,11 @@ def search_replace_all(filepath: str, pattern: str, replacement: str, cell_type:
             continue
         
         original = cell['source']
-        new_source = regex.sub(replacement, original)
+        new_source, count = regex.subn(replacement, original)
         
-        if new_source != original:
+        if count > 0:
             cell['source'] = new_source
-            replacements_made += original.count(pattern) if not regex.groups else len(regex.findall(original))
+            replacements_made += count
     
     write_notebook_file(filepath, nb)
     return replacements_made
@@ -714,7 +714,7 @@ def sync_metadata_across_notebooks(filepaths: list[str], metadata: dict, merge: 
             update_metadata(filepath, metadata)
         else:
             nb = read_notebook_file(filepath)
-            nb.metadata = nbformat.from_dict(metadata) if isinstance(metadata, dict) else metadata
+            nb.metadata = metadata
             write_notebook_file(filepath, nb)
 
 
