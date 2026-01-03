@@ -143,8 +143,8 @@ class TestMCPTransports:
         
         # Verify some expected tools exist
         tool_names = [tool["name"] for tool in response["result"]["tools"]]
-        assert "read_notebook" in tool_names
-        assert "list_cells" in tool_names
+        assert "ipynb_read_notebook" in tool_names
+        assert "ipynb_list_cells" in tool_names
     
     @pytest.mark.asyncio
     async def test_http_transport(self, http_harness):
@@ -168,8 +168,8 @@ class TestMCPTransports:
                 assert len(tools.tools) > 0
                 
                 tool_names = [tool.name for tool in tools.tools]
-                assert "read_notebook" in tool_names
-                assert "list_cells" in tool_names
+                assert "ipynb_read_notebook" in tool_names
+                assert "ipynb_list_cells" in tool_names
     
     @pytest.mark.asyncio
     async def test_custom_http_port(self):

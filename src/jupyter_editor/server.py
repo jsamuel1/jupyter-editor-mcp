@@ -36,59 +36,59 @@ Best Practice: Prompt users to clear notebook outputs using clear_outputs() befo
 # Read Operations
 
 @mcp.tool
-def read_notebook(filepath: str) -> dict:
+def ipynb_read_notebook(ipynb_filepath: str) -> dict:
     """Read a Jupyter Notebook (.ipynb) and return structure summary.
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         
     Returns:
         Dictionary with cell_count, cell_types, kernel_info, format_version
         or dict with 'error' key on failure
     """
     try:
-        return operations.get_notebook_summary(filepath)
+        return operations.get_notebook_summary(ipynb_filepath)
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except Exception as e:
         return {"error": f"Failed to read notebook: {str(e)}"}
 
 
 @mcp.tool
-def list_cells(filepath: str) -> dict:
+def ipynb_list_cells(ipynb_filepath: str) -> dict:
     """List all cells in a Jupyter Notebook (.ipynb) with indices, types, and content previews.
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         
     Returns:
         Dict with 'cells' list or 'error' key on failure
     """
     try:
-        cells = operations.list_all_cells(filepath)
+        cells = operations.list_all_cells(ipynb_filepath)
         return {"cells": cells}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except Exception as e:
         return {"error": f"Failed to list cells: {str(e)}"}
 
 
 @mcp.tool
-def get_cell(filepath: str, cell_index: int) -> dict:
+def ipynb_get_cell(ipynb_filepath: str, cell_index: int) -> dict:
     """Get content of a specific cell by index from a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Index of cell (supports negative indexing)
         
     Returns:
         Dict with 'content' or 'error' key
     """
     try:
-        content = operations.get_cell_content(filepath, cell_index)
+        content = operations.get_cell_content(ipynb_filepath, cell_index)
         return {"content": content}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except IndexError:
         return {"error": f"Cell index {cell_index} out of range"}
     except Exception as e:
@@ -96,11 +96,11 @@ def get_cell(filepath: str, cell_index: int) -> dict:
 
 
 @mcp.tool
-def search_cells(filepath: str, pattern: str, case_sensitive: bool = False) -> dict:
+def ipynb_search_cells(ipynb_filepath: str, pattern: str, case_sensitive: bool = False) -> dict:
     """Search for pattern in cell content of a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         pattern: Search pattern (regex supported)
         case_sensitive: Whether search is case-sensitive (default: False)
         
@@ -108,10 +108,10 @@ def search_cells(filepath: str, pattern: str, case_sensitive: bool = False) -> d
         Dict with 'results' list or 'error' key
     """
     try:
-        results = operations.search_cells(filepath, pattern, case_sensitive)
+        results = operations.search_cells(ipynb_filepath, pattern, case_sensitive)
         return {"results": results, "match_count": len(results)}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except Exception as e:
         return {"error": f"Failed to search cells: {str(e)}"}
 
@@ -119,11 +119,11 @@ def search_cells(filepath: str, pattern: str, case_sensitive: bool = False) -> d
 # Cell Modification Operations
 
 @mcp.tool
-def replace_cell(filepath: str, cell_index: int, new_content: str) -> dict:
+def ipynb_replace_cell(ipynb_filepath: str, cell_index: int, new_content: str) -> dict:
     """Replace entire cell content in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Index of cell to replace
         new_content: New content for cell (provide as raw string, no additional escaping needed)
         
@@ -131,10 +131,10 @@ def replace_cell(filepath: str, cell_index: int, new_content: str) -> dict:
         Dict with 'success' or 'error' key
     """
     try:
-        operations.replace_cell_content(filepath, cell_index, new_content)
+        operations.replace_cell_content(ipynb_filepath, cell_index, new_content)
         return {"success": True}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except IndexError:
         return {"error": f"Cell index {cell_index} out of range"}
     except Exception as e:
@@ -142,11 +142,11 @@ def replace_cell(filepath: str, cell_index: int, new_content: str) -> dict:
 
 
 @mcp.tool
-def insert_cell(filepath: str, cell_index: int, content: str, cell_type: str = "code") -> dict:
+def ipynb_insert_cell(ipynb_filepath: str, cell_index: int, content: str, cell_type: str = "code") -> dict:
     """Insert new cell at specified position in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Position to insert cell (0-based indexing)
         content: Cell content (provide as raw string, no additional escaping needed)
         cell_type: Type of cell ('code', 'markdown', 'raw')
@@ -158,11 +158,11 @@ def insert_cell(filepath: str, cell_index: int, content: str, cell_type: str = "
         Indices of cells at or after the insertion point will shift by +1
     """
     try:
-        operations.insert_cell(filepath, cell_index, content, cell_type)
-        nb = operations.read_notebook_file(filepath)
+        operations.insert_cell(ipynb_filepath, cell_index, content, cell_type)
+        nb = operations.read_notebook_file(ipynb_filepath)
         return {"success": True, "new_cell_count": len(nb['cells'])}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except ValueError as e:
         return {"error": str(e)}
     except Exception as e:
@@ -170,11 +170,11 @@ def insert_cell(filepath: str, cell_index: int, content: str, cell_type: str = "
 
 
 @mcp.tool
-def append_cell(filepath: str, content: str, cell_type: str = "code") -> dict:
+def ipynb_append_cell(ipynb_filepath: str, content: str, cell_type: str = "code") -> dict:
     """Append cell to end of a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         content: Cell content (provide as raw string, no additional escaping needed)
         cell_type: Type of cell ('code', 'markdown', 'raw')
         
@@ -182,12 +182,12 @@ def append_cell(filepath: str, content: str, cell_type: str = "code") -> dict:
         Dict with 'success' and 'cell_index' or 'error' key (0-based index of new cell)
     """
     try:
-        nb = operations.read_notebook_file(filepath)
+        nb = operations.read_notebook_file(ipynb_filepath)
         cell_index = len(nb['cells'])
-        operations.append_cell(filepath, content, cell_type)
+        operations.append_cell(ipynb_filepath, content, cell_type)
         return {"success": True, "cell_index": cell_index}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except ValueError as e:
         return {"error": str(e)}
     except Exception as e:
@@ -195,11 +195,11 @@ def append_cell(filepath: str, content: str, cell_type: str = "code") -> dict:
 
 
 @mcp.tool
-def delete_cell(filepath: str, cell_index: int) -> dict:
+def ipynb_delete_cell(ipynb_filepath: str, cell_index: int) -> dict:
     """Delete cell at specified index in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Index of cell to delete (0-based indexing)
         
     Returns:
@@ -209,11 +209,11 @@ def delete_cell(filepath: str, cell_index: int) -> dict:
         Indices of cells after the deleted cell will shift by -1
     """
     try:
-        operations.delete_cell(filepath, cell_index)
-        nb = operations.read_notebook_file(filepath)
+        operations.delete_cell(ipynb_filepath, cell_index)
+        nb = operations.read_notebook_file(ipynb_filepath)
         return {"success": True, "new_cell_count": len(nb['cells'])}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except IndexError:
         return {"error": f"Cell index {cell_index} out of range"}
     except Exception as e:
@@ -221,11 +221,11 @@ def delete_cell(filepath: str, cell_index: int) -> dict:
 
 
 @mcp.tool
-def str_replace_in_cell(filepath: str, cell_index: int, old_str: str, new_str: str) -> dict:
+def ipynb_str_replace_in_cell(ipynb_filepath: str, cell_index: int, old_str: str, new_str: str) -> dict:
     """Replace substring within cell content in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Index of cell
         old_str: String to replace (provide as raw string, no additional escaping needed)
         new_str: Replacement string (provide as raw string, no additional escaping needed)
@@ -234,10 +234,10 @@ def str_replace_in_cell(filepath: str, cell_index: int, old_str: str, new_str: s
         Dict with 'success' or 'error' key
     """
     try:
-        operations.str_replace_in_cell(filepath, cell_index, old_str, new_str)
+        operations.str_replace_in_cell(ipynb_filepath, cell_index, old_str, new_str)
         return {"success": True}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except IndexError:
         return {"error": f"Cell index {cell_index} out of range"}
     except ValueError as e:
@@ -249,20 +249,20 @@ def str_replace_in_cell(filepath: str, cell_index: int, old_str: str, new_str: s
 # Metadata Operations
 
 @mcp.tool
-def get_metadata(filepath: str, cell_index: int | None = None) -> dict:
+def ipynb_get_metadata(ipynb_filepath: str, cell_index: int | None = None) -> dict:
     """Get Jupyter Notebook (.ipynb) or cell metadata.
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_index: Index of cell (None for notebook metadata)
         
     Returns:
         Metadata dictionary or dict with 'error' key
     """
     try:
-        return operations.get_metadata(filepath, cell_index)
+        return operations.get_metadata(ipynb_filepath, cell_index)
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except IndexError:
         return {"error": f"Cell index {cell_index} out of range"}
     except Exception as e:
@@ -270,11 +270,11 @@ def get_metadata(filepath: str, cell_index: int | None = None) -> dict:
 
 
 @mcp.tool
-def update_metadata(filepath: str, metadata: dict, cell_index: int | None = None) -> dict:
+def ipynb_update_metadata(ipynb_filepath: str, metadata: dict, cell_index: int | None = None) -> dict:
     """Update Jupyter Notebook (.ipynb) or cell metadata.
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         metadata: Metadata dictionary to merge
         cell_index: Index of cell (None for notebook metadata)
         
@@ -282,10 +282,10 @@ def update_metadata(filepath: str, metadata: dict, cell_index: int | None = None
         Dict with 'success' or 'error' key
     """
     try:
-        operations.update_metadata(filepath, metadata, cell_index)
+        operations.update_metadata(ipynb_filepath, metadata, cell_index)
         return {"success": True}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except IndexError:
         return {"error": f"Cell index {cell_index} out of range"}
     except Exception as e:
@@ -293,11 +293,11 @@ def update_metadata(filepath: str, metadata: dict, cell_index: int | None = None
 
 
 @mcp.tool
-def set_kernel(filepath: str, kernel_name: str, display_name: str, language: str = "python") -> dict:
+def ipynb_set_kernel(ipynb_filepath: str, kernel_name: str, display_name: str, language: str = "python") -> dict:
     """Set kernel specification for a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         kernel_name: Kernel name (e.g., 'python3')
         display_name: Display name (e.g., 'Python 3')
         language: Programming language (default: 'python')
@@ -306,16 +306,16 @@ def set_kernel(filepath: str, kernel_name: str, display_name: str, language: str
         Dict with 'success' or 'error' key
     """
     try:
-        operations.set_kernel_spec(filepath, kernel_name, display_name, language)
+        operations.set_kernel_spec(ipynb_filepath, kernel_name, display_name, language)
         return {"success": True}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except Exception as e:
         return {"error": f"Failed to set kernel: {str(e)}"}
 
 
 @mcp.tool
-def list_available_kernels() -> dict:
+def ipynb_list_available_kernels() -> dict:
     """List common Jupyter Notebook kernel configurations.
     
     Returns:
@@ -327,11 +327,11 @@ def list_available_kernels() -> dict:
 # Batch Operations - Multi-Cell
 
 @mcp.tool
-def replace_cells_batch(filepath: str, replacements: list[dict]) -> dict:
+def ipynb_replace_cells_batch(ipynb_filepath: str, replacements: list[dict]) -> dict:
     """Replace multiple cells in one operation in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         replacements: List of dicts with 'cell_index' and 'content' keys
                      (provide content as raw strings, no additional escaping needed)
         
@@ -339,10 +339,10 @@ def replace_cells_batch(filepath: str, replacements: list[dict]) -> dict:
         Dict with 'success' and 'cells_modified' or 'error' key
     """
     try:
-        operations.replace_cells_batch(filepath, replacements)
+        operations.replace_cells_batch(ipynb_filepath, replacements)
         return {"success": True, "cells_modified": len(replacements)}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except IndexError as e:
         return {"error": f"Cell index out of range: {str(e)}"}
     except Exception as e:
@@ -350,11 +350,11 @@ def replace_cells_batch(filepath: str, replacements: list[dict]) -> dict:
 
 
 @mcp.tool
-def delete_cells_batch(filepath: str, cell_indices: list[int]) -> dict:
+def ipynb_delete_cells_batch(ipynb_filepath: str, cell_indices: list[int]) -> dict:
     """Delete multiple cells by indices from a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_indices: List of cell indices to delete (0-based indexing)
         
     Returns:
@@ -365,11 +365,11 @@ def delete_cells_batch(filepath: str, cell_indices: list[int]) -> dict:
         Provide indices as they appear before any deletions occur.
     """
     try:
-        operations.delete_cells_batch(filepath, cell_indices)
-        nb = operations.read_notebook_file(filepath)
+        operations.delete_cells_batch(ipynb_filepath, cell_indices)
+        nb = operations.read_notebook_file(ipynb_filepath)
         return {"success": True, "cells_deleted": len(cell_indices), "new_cell_count": len(nb['cells'])}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except IndexError as e:
         return {"error": f"Cell index out of range: {str(e)}"}
     except Exception as e:
@@ -377,11 +377,11 @@ def delete_cells_batch(filepath: str, cell_indices: list[int]) -> dict:
 
 
 @mcp.tool
-def insert_cells_batch(filepath: str, insertions: list[dict]) -> dict:
+def ipynb_insert_cells_batch(ipynb_filepath: str, insertions: list[dict]) -> dict:
     """Insert multiple cells at specified positions in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         insertions: List of dicts with 'cell_index', 'content', 'cell_type' keys
                    (provide content as raw strings, no additional escaping needed)
         
@@ -394,10 +394,10 @@ def insert_cells_batch(filepath: str, insertions: list[dict]) -> dict:
         to maintain intended positions.
     """
     try:
-        operations.insert_cells_batch(filepath, insertions)
+        operations.insert_cells_batch(ipynb_filepath, insertions)
         return {"success": True, "cells_inserted": len(insertions)}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except ValueError as e:
         return {"error": str(e)}
     except Exception as e:
@@ -405,11 +405,11 @@ def insert_cells_batch(filepath: str, insertions: list[dict]) -> dict:
 
 
 @mcp.tool
-def search_replace_all(filepath: str, pattern: str, replacement: str, cell_type: str | None = None) -> dict:
+def ipynb_search_replace_all(ipynb_filepath: str, pattern: str, replacement: str, cell_type: str | None = None) -> dict:
     """Search and replace across all cells in a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         pattern: Pattern to search for (regex)
         replacement: Replacement string
         cell_type: Optional filter by cell type
@@ -418,30 +418,30 @@ def search_replace_all(filepath: str, pattern: str, replacement: str, cell_type:
         Dict with 'success' and 'replacements_made' or 'error' key
     """
     try:
-        count = operations.search_replace_all(filepath, pattern, replacement, cell_type)
+        count = operations.search_replace_all(ipynb_filepath, pattern, replacement, cell_type)
         return {"success": True, "replacements_made": count}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except Exception as e:
         return {"error": f"Failed to search/replace: {str(e)}"}
 
 
 @mcp.tool
-def reorder_cells(filepath: str, new_order: list[int]) -> dict:
+def ipynb_reorder_cells(ipynb_filepath: str, new_order: list[int]) -> dict:
     """Reorder cells in a Jupyter Notebook (.ipynb) by providing new index mapping.
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         new_order: List of indices in desired order (0-based indexing)
         
     Returns:
         Dict with 'success' or 'error' key
     """
     try:
-        operations.reorder_cells(filepath, new_order)
+        operations.reorder_cells(ipynb_filepath, new_order)
         return {"success": True}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except ValueError as e:
         return {"error": str(e)}
     except Exception as e:
@@ -449,11 +449,11 @@ def reorder_cells(filepath: str, new_order: list[int]) -> dict:
 
 
 @mcp.tool
-def filter_cells(filepath: str, cell_type: str | None = None, pattern: str | None = None) -> dict:
+def ipynb_filter_cells(ipynb_filepath: str, cell_type: str | None = None, pattern: str | None = None) -> dict:
     """Keep only cells matching criteria in a Jupyter Notebook (.ipynb), delete others.
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         cell_type: Optional filter by cell type
         pattern: Optional regex pattern to match
         
@@ -461,17 +461,17 @@ def filter_cells(filepath: str, cell_type: str | None = None, pattern: str | Non
         Dict with 'success', 'cells_kept' or 'error' key
     """
     try:
-        nb_before = operations.read_notebook_file(filepath)
+        nb_before = operations.read_notebook_file(ipynb_filepath)
         cells_before = len(nb_before['cells'])
         
-        operations.filter_cells(filepath, cell_type, pattern)
+        operations.filter_cells(ipynb_filepath, cell_type, pattern)
         
-        nb_after = operations.read_notebook_file(filepath)
+        nb_after = operations.read_notebook_file(ipynb_filepath)
         cells_after = len(nb_after['cells'])
         
         return {"success": True, "cells_kept": cells_after, "cells_deleted": cells_before - cells_after}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except ValueError as e:
         return {"error": str(e)}
     except Exception as e:
@@ -481,21 +481,21 @@ def filter_cells(filepath: str, cell_type: str | None = None, pattern: str | Non
 # Batch Operations - Multi-Notebook
 
 @mcp.tool
-def merge_notebooks(output_filepath: str, input_filepaths: list[str], add_separators: bool = True) -> dict:
+def ipynb_merge_notebooks(output_ipynb_filepath: str, input_ipynb_filepaths: list[str], add_separators: bool = True) -> dict:
     """Merge multiple Jupyter Notebooks (.ipynb) into one.
     
     Args:
-        output_filepath: Path for merged notebook (absolute path preferred)
-        input_filepaths: List of notebook paths to merge (absolute paths preferred)
+        output_ipynb_filepath: Path for merged notebook (absolute path preferred)
+        input_ipynb_filepaths: List of notebook paths to merge (absolute paths preferred)
         add_separators: Whether to add separator cells between notebooks
         
     Returns:
         Dict with 'success', 'total_cells', 'notebooks_merged' or 'error' key
     """
     try:
-        operations.merge_notebooks(output_filepath, input_filepaths, add_separators)
-        nb = operations.read_notebook_file(output_filepath)
-        return {"success": True, "total_cells": len(nb['cells']), "notebooks_merged": len(input_filepaths)}
+        operations.merge_notebooks(output_ipynb_filepath, input_ipynb_filepaths, add_separators)
+        nb = operations.read_notebook_file(output_ipynb_filepath)
+        return {"success": True, "total_cells": len(nb['cells']), "notebooks_merged": len(input_ipynb_filepaths)}
     except FileNotFoundError as e:
         return {"error": f"Notebook not found: {str(e)}"}
     except Exception as e:
@@ -503,11 +503,11 @@ def merge_notebooks(output_filepath: str, input_filepaths: list[str], add_separa
 
 
 @mcp.tool
-def split_notebook(filepath: str, output_dir: str, split_by: str = "markdown_headers") -> dict:
+def ipynb_split_notebook(ipynb_filepath: str, output_dir: str, split_by: str = "markdown_headers") -> dict:
     """Split a Jupyter Notebook (.ipynb) into multiple files by criteria.
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         output_dir: Directory for output files
         split_by: Split criteria ('markdown_headers' or 'cell_count')
         
@@ -515,10 +515,10 @@ def split_notebook(filepath: str, output_dir: str, split_by: str = "markdown_hea
         Dict with 'success' and 'files_created' or 'error' key
     """
     try:
-        files = operations.split_notebook(filepath, output_dir, split_by)
+        files = operations.split_notebook(ipynb_filepath, output_dir, split_by)
         return {"success": True, "files_created": files}
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except ValueError as e:
         return {"error": str(e)}
     except Exception as e:
@@ -526,11 +526,11 @@ def split_notebook(filepath: str, output_dir: str, split_by: str = "markdown_hea
 
 
 @mcp.tool
-def apply_to_notebooks(filepaths: list[str], operation: str, operation_params: dict | None = None) -> dict:
+def ipynb_apply_to_notebooks(ipynb_filepaths: list[str], operation: str, operation_params: dict | None = None) -> dict:
     """Apply same operation to multiple Jupyter Notebooks (.ipynb).
     
     Args:
-        filepaths: List of notebook paths (absolute paths preferred)
+        ipynb_filepaths: List of notebook paths (absolute paths preferred)
         operation: Operation name ('set_kernel', 'clear_outputs', 'update_metadata')
         operation_params: Parameters for the operation as a dictionary
         
@@ -539,7 +539,7 @@ def apply_to_notebooks(filepaths: list[str], operation: str, operation_params: d
     """
     try:
         params = operation_params or {}
-        results = operations.apply_operation_to_notebooks(filepaths, operation, **params)
+        results = operations.apply_operation_to_notebooks(ipynb_filepaths, operation, **params)
         success_count = sum(1 for v in results.values() if v)
         return {"success": True, "results": results, "successful": success_count, "failed": len(results) - success_count}
     except ValueError as e:
@@ -549,11 +549,11 @@ def apply_to_notebooks(filepaths: list[str], operation: str, operation_params: d
 
 
 @mcp.tool
-def search_notebooks(filepaths: list[str], pattern: str, return_context: bool = True) -> dict:
+def ipynb_search_notebooks(ipynb_filepaths: list[str], pattern: str, return_context: bool = True) -> dict:
     """Search across multiple Jupyter Notebooks (.ipynb).
     
     Args:
-        filepaths: List of notebook paths (absolute paths preferred)
+        ipynb_filepaths: List of notebook paths (absolute paths preferred)
         pattern: Search pattern (regex)
         return_context: Whether to include context
         
@@ -561,18 +561,18 @@ def search_notebooks(filepaths: list[str], pattern: str, return_context: bool = 
         Dict with 'results' and 'match_count' or 'error' key
     """
     try:
-        results = operations.search_across_notebooks(filepaths, pattern, return_context)
+        results = operations.search_across_notebooks(ipynb_filepaths, pattern, return_context)
         return {"results": results, "match_count": len(results)}
     except Exception as e:
         return {"error": f"Failed to search notebooks: {str(e)}"}
 
 
 @mcp.tool
-def sync_metadata(filepaths: list[str], metadata: dict, merge: bool = False) -> dict:
+def ipynb_sync_metadata(ipynb_filepaths: list[str], metadata: dict, merge: bool = False) -> dict:
     """Synchronize metadata across multiple Jupyter Notebooks (.ipynb).
     
     Args:
-        filepaths: List of notebook paths (absolute paths preferred)
+        ipynb_filepaths: List of notebook paths (absolute paths preferred)
         metadata: Metadata to apply
         merge: Whether to merge with existing metadata
         
@@ -580,20 +580,20 @@ def sync_metadata(filepaths: list[str], metadata: dict, merge: bool = False) -> 
         Dict with 'success' and 'notebooks_updated' or 'error' key
     """
     try:
-        operations.sync_metadata_across_notebooks(filepaths, metadata, merge)
-        return {"success": True, "notebooks_updated": len(filepaths)}
+        operations.sync_metadata_across_notebooks(ipynb_filepaths, metadata, merge)
+        return {"success": True, "notebooks_updated": len(ipynb_filepaths)}
     except Exception as e:
         return {"error": f"Failed to sync metadata: {str(e)}"}
 
 
 @mcp.tool
-def extract_cells(output_filepath: str, input_filepaths: list[str], 
+def ipynb_extract_cells(output_ipynb_filepath: str, input_ipynb_filepaths: list[str], 
                   pattern: str | None = None, cell_type: str | None = None) -> dict:
     """Extract matching cells from multiple Jupyter Notebooks (.ipynb) into a new notebook.
     
     Args:
-        output_filepath: Path for output notebook (absolute path preferred)
-        input_filepaths: List of source notebook paths (absolute paths preferred)
+        output_ipynb_filepath: Path for output notebook (absolute path preferred)
+        input_ipynb_filepaths: List of source notebook paths (absolute paths preferred)
         pattern: Optional regex pattern to match
         cell_type: Optional cell type filter
         
@@ -601,26 +601,26 @@ def extract_cells(output_filepath: str, input_filepaths: list[str],
         Dict with 'success', 'cells_extracted', 'source_notebooks' or 'error' key
     """
     try:
-        operations.extract_cells_from_notebooks(output_filepath, input_filepaths, pattern, cell_type)
-        nb = operations.read_notebook_file(output_filepath)
-        return {"success": True, "cells_extracted": len(nb['cells']), "source_notebooks": len(input_filepaths)}
+        operations.extract_cells_from_notebooks(output_ipynb_filepath, input_ipynb_filepaths, pattern, cell_type)
+        nb = operations.read_notebook_file(output_ipynb_filepath)
+        return {"success": True, "cells_extracted": len(nb['cells']), "source_notebooks": len(input_ipynb_filepaths)}
     except Exception as e:
         return {"error": f"Failed to extract cells: {str(e)}"}
 
 
 @mcp.tool
-def clear_outputs(filepaths: str | list[str]) -> dict:
+def ipynb_clear_outputs(ipynb_filepaths: str | list[str]) -> dict:
     """Clear all outputs from code cells in one or more Jupyter Notebooks (.ipynb).
     
     Args:
-        filepaths: Single filepath or list of filepaths (absolute paths preferred)
+        ipynb_filepaths: Single filepath or list of filepaths (absolute paths preferred)
         
     Returns:
         Dict with 'success' and 'notebooks_processed' or 'error' key
     """
     try:
-        operations.clear_outputs(filepaths)
-        count = 1 if isinstance(filepaths, str) else len(filepaths)
+        operations.clear_outputs(ipynb_filepaths)
+        count = 1 if isinstance(ipynb_filepaths, str) else len(ipynb_filepaths)
         return {"success": True, "notebooks_processed": count}
     except FileNotFoundError as e:
         return {"error": f"Notebook not found: {str(e)}"}
@@ -631,17 +631,17 @@ def clear_outputs(filepaths: str | list[str]) -> dict:
 # Validation Operations
 
 @mcp.tool
-def validate_notebook(filepath: str) -> dict:
+def ipynb_validate_notebook(ipynb_filepath: str) -> dict:
     """Validate Jupyter Notebook (.ipynb) structure.
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         
     Returns:
         Dict with 'valid' boolean and optional 'errors' list
     """
     try:
-        is_valid, error = operations.validate_notebook_file(filepath)
+        is_valid, error = operations.validate_notebook_file(ipynb_filepath)
         if is_valid:
             return {"valid": True}
         else:
@@ -651,35 +651,35 @@ def validate_notebook(filepath: str) -> dict:
 
 
 @mcp.tool
-def get_notebook_info(filepath: str) -> dict:
+def ipynb_get_notebook_info(ipynb_filepath: str) -> dict:
     """Get summary information about a Jupyter Notebook (.ipynb).
     
     Args:
-        filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
+        ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
         
     Returns:
         Dict with cell_count, cell_types, kernel, format_version, file_size or 'error' key
     """
     try:
-        return operations.get_notebook_info(filepath)
+        return operations.get_notebook_info(ipynb_filepath)
     except FileNotFoundError:
-        return {"error": f"Notebook not found: {filepath}"}
+        return {"error": f"Notebook not found: {ipynb_filepath}"}
     except Exception as e:
         return {"error": f"Failed to get notebook info: {str(e)}"}
 
 
 @mcp.tool
-def validate_notebooks_batch(filepaths: list[str]) -> dict:
+def ipynb_validate_notebooks_batch(ipynb_filepaths: list[str]) -> dict:
     """Validate multiple Jupyter Notebooks (.ipynb).
     
     Args:
-        filepaths: List of notebook paths (absolute paths preferred)
+        ipynb_filepaths: List of notebook paths (absolute paths preferred)
         
     Returns:
         Dict with 'results' mapping filepath to validation status
     """
     try:
-        raw_results = operations.validate_multiple_notebooks(filepaths)
+        raw_results = operations.validate_multiple_notebooks(ipynb_filepaths)
         
         # Format results for better readability
         results = {}
@@ -693,9 +693,9 @@ def validate_notebooks_batch(filepaths: list[str]) -> dict:
         
         return {
             "results": results,
-            "total": len(filepaths),
+            "total": len(ipynb_filepaths),
             "valid": valid_count,
-            "invalid": len(filepaths) - valid_count
+            "invalid": len(ipynb_filepaths) - valid_count
         }
     except Exception as e:
         return {"error": f"Failed to validate notebooks: {str(e)}"}
