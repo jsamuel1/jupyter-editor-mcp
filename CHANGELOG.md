@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.2.2] - 2026-01-16
+
+### Changed
+- Enhanced POWER.md with comprehensive tool usage guide, selection table, and workflows
+
 ## [0.2.1] - 2026-01-16
 
 ### Added
