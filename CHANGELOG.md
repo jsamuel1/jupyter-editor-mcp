@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8] - 2026-01-16
+
+### Added
+- Kiro Power in `power/` directory for easy installation via Kiro Powers UI
+- POWER.md with comprehensive documentation, workflows, and troubleshooting
+- mcp.json with auto-approve configuration for read-only tools
+
 ## [0.1.7] - 2026-01-02
 
 ### Added

@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "jupyter-editor": {
+      "command": "uvx",
+      "args": ["jupyter-editor-mcp"],
+      "disabled": false,
+      "autoApprove": [
+        "ipynb_list_cells",
+        "ipynb_get_cell",
+        "ipynb_read_notebook",
+        "ipynb_get_notebook_info",
+        "ipynb_search_cells"
+      ]
+    }
+  }
+}
