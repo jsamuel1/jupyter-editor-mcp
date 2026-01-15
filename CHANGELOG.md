@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.1.8] - 2026-01-16
+## [0.2.1] - 2026-01-16
 
 ### Added
 - Kiro Power in `power/` directory for easy installation via Kiro Powers UI
