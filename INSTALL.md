@@ -149,7 +149,7 @@ export PATH="$HOME/.local/bin:$PATH"
 Ensure all dependencies are installed:
 
 ```bash
-uv pip install nbformat fastmcp
+uv add nbformat fastmcp
 ```
 
 ### MCP server not connecting
