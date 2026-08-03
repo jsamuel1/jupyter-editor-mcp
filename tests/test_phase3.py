@@ -49,6 +49,25 @@ def test_insert_cells_batch(temp_notebook_file):
     nbformat.validate(nb)
 
 
+def test_insert_cells_batch_preserves_order_at_same_position(temp_notebook_file):
+    """Cells targeting the same index retain their insertion-list order."""
+    insertions = [
+        {"cell_index": 1, "content": "first", "cell_type": "markdown"},
+        {"cell_index": 1, "content": "second", "cell_type": "markdown"},
+    ]
+
+    operations.insert_cells_batch(temp_notebook_file, insertions)
+
+    nb = operations.read_notebook_file(temp_notebook_file)
+    assert [cell['source'] for cell in nb['cells']] == [
+        "print('hello world')",
+        "first",
+        "second",
+        "# Test Notebook\n\nThis is a simple test notebook.",
+        "x = 42\ny = x * 2",
+    ]
+
+
 def test_search_replace_all(temp_notebook_file):
     """Test US-017: Search and Replace All."""
     count = operations.search_replace_all(temp_notebook_file, "hello", "goodbye")

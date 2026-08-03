@@ -430,8 +430,16 @@ def insert_cells_batch(filepath: str, insertions: list[dict]) -> None:
     """
     nb = read_notebook_file(filepath)
     
-    # Sort by cell_index in reverse to maintain correct positions
-    sorted_insertions = sorted(insertions, key=lambda x: x['cell_index'], reverse=True)
+    # Process from the end so each index refers to the original notebook.
+    # Reverse equal-index entries too, preserving their supplied order after insertion.
+    sorted_insertions = [
+        insertion
+        for _, insertion in sorted(
+            enumerate(insertions),
+            key=lambda item: (item[1]['cell_index'], item[0]),
+            reverse=True,
+        )
+    ]
     
     for insertion in sorted_insertions:
         cell_index = insertion['cell_index']
