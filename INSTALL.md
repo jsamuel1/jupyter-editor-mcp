@@ -37,11 +37,8 @@ This method installs the package in editable mode for development.
 git clone https://github.com/jsamuel1/jupyter-editor-mcp.git
 cd jupyter-editor-mcp
 
-# Create virtual environment
-uv venv
-
 # Install in development mode with dev dependencies
-uv pip install -e ".[dev]"
+uv sync --extra dev
 ```
 
 **Run tests:**
@@ -119,7 +116,7 @@ uv tool install --force git+https://github.com/jsamuel1/jupyter-editor-mcp.git
 ```bash
 cd /path/to/jupyter-editor-mcp
 git pull
-uv pip install -e ".[dev]"
+uv sync --extra dev
 ```
 
 ## Uninstalling
