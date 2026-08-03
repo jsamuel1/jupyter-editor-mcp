@@ -2,13 +2,13 @@
 
 import pytest
 import nbformat
-from src.jupyter_editor import operations
+from jupyter_editor import operations
 
 
 def test_validate_notebook_file_valid(temp_notebook_file):
     """Test US-027: Validate Notebook (valid notebook)."""
     is_valid, error = operations.validate_notebook_file(temp_notebook_file)
-    
+
     assert is_valid is True
     assert error is None
 
@@ -20,7 +20,7 @@ def test_validate_notebook_file_invalid(tmp_path):
     # Manually create invalid cell (missing required 'source' field)
     invalid_cell = {'cell_type': 'code', 'metadata': {}}  # Missing 'source'
     nb['cells'] = [invalid_cell]
-    
+
     filepath = tmp_path / "invalid.ipynb"
     import json
     # Convert to dict manually
@@ -28,9 +28,9 @@ def test_validate_notebook_file_invalid(tmp_path):
     nb_dict['cells'] = [invalid_cell]
     with open(filepath, 'w') as f:
         json.dump(nb_dict, f)
-    
+
     is_valid, error = operations.validate_notebook_file(str(filepath))
-    
+
     assert is_valid is False
     assert error is not None
 
@@ -38,7 +38,7 @@ def test_validate_notebook_file_invalid(tmp_path):
 def test_get_notebook_info(temp_notebook_file):
     """Test US-028: Get Notebook Info."""
     info = operations.get_notebook_info(temp_notebook_file)
-    
+
     assert info['cell_count'] == 3
     assert 'code' in info['cell_types']
     assert 'markdown' in info['cell_types']
@@ -55,24 +55,24 @@ def test_validate_multiple_notebooks(tmp_path):
     # Create valid notebook
     nb1 = nbformat.v4.new_notebook()
     nb1['cells'] = [nbformat.v4.new_code_cell("print('test')")]
-    
+
     file1 = tmp_path / "valid.ipynb"
     with open(file1, 'w') as f:
         nbformat.write(nb1, f)
-    
+
     # Create invalid notebook with invalid cell
     nb2 = nbformat.v4.new_notebook()
     invalid_cell = {'cell_type': 'code', 'metadata': {}}  # Missing 'source'
-    
+
     file2 = tmp_path / "invalid.ipynb"
     import json
     nb_dict = dict(nb2)
     nb_dict['cells'] = [invalid_cell]
     with open(file2, 'w') as f:
         json.dump(nb_dict, f)
-    
+
     results = operations.validate_multiple_notebooks([str(file1), str(file2)])
-    
+
     assert len(results) == 2
     assert results[str(file1)][0] is True  # valid
     assert results[str(file2)][0] is False  # invalid
