@@ -2,7 +2,7 @@
 
 import pytest
 import nbformat
-from src.jupyter_editor import operations
+from jupyter_editor import operations
 
 
 def test_read_notebook_file(temp_notebook_file):
@@ -28,7 +28,7 @@ def test_write_notebook_file(temp_notebook_file, simple_notebook):
 def test_get_notebook_summary(temp_notebook_file):
     """Test US-001: Read Notebook Structure."""
     summary = operations.get_notebook_summary(temp_notebook_file)
-    
+
     assert summary['cell_count'] == 3
     assert summary['cell_types'] == {'code': 2, 'markdown': 1}
     assert summary['kernel_info']['name'] == 'python3'
@@ -40,7 +40,7 @@ def test_get_notebook_summary(temp_notebook_file):
 def test_list_all_cells(temp_notebook_file):
     """Test US-002: List All Cells."""
     cells = operations.list_all_cells(temp_notebook_file)
-    
+
     assert len(cells) == 3
     assert cells[0]['index'] == 0
     assert cells[0]['type'] == 'code'
@@ -54,11 +54,11 @@ def test_list_all_cells_preview_truncation(tmp_path):
     nb = nbformat.v4.new_notebook()
     long_content = "x = " + "1" * 200
     nb['cells'] = [nbformat.v4.new_code_cell(long_content)]
-    
+
     filepath = tmp_path / "long.ipynb"
     with open(filepath, 'w') as f:
         nbformat.write(nb, f)
-    
+
     cells = operations.list_all_cells(str(filepath))
     assert len(cells[0]['preview']) == 103  # 100 + '...'
     assert cells[0]['preview'].endswith('...')
@@ -68,7 +68,7 @@ def test_get_cell_content(temp_notebook_file):
     """Test US-003: Get Specific Cell."""
     content = operations.get_cell_content(temp_notebook_file, 0)
     assert content == "print('hello world')"
-    
+
     content = operations.get_cell_content(temp_notebook_file, 1)
     assert "# Test Notebook" in content
 
@@ -88,7 +88,7 @@ def test_get_cell_content_invalid_index(temp_notebook_file):
 def test_search_cells(temp_notebook_file):
     """Test US-004: Search Cell Content."""
     results = operations.search_cells(temp_notebook_file, "hello")
-    
+
     assert len(results) == 1
     assert results[0]['cell_index'] == 0
     assert results[0]['cell_type'] == 'code'
@@ -100,7 +100,7 @@ def test_search_cells_case_insensitive(temp_notebook_file):
     """Test case-insensitive search."""
     results = operations.search_cells(temp_notebook_file, "HELLO", case_sensitive=False)
     assert len(results) == 1
-    
+
     results = operations.search_cells(temp_notebook_file, "HELLO", case_sensitive=True)
     assert len(results) == 0
 

@@ -4,7 +4,7 @@ import pytest
 import nbformat
 import tempfile
 from pathlib import Path
-from src.jupyter_editor import operations
+from jupyter_editor import operations
 
 
 @pytest.fixture(autouse=True)

@@ -7,8 +7,7 @@ Thanks for your interest in contributing to jupyter-editor-mcp!
 ```bash
 git clone https://github.com/jsamuel1/jupyter-editor-mcp.git
 cd jupyter-editor-mcp
-uv venv
-uv pip install -e ".[dev]"
+uv sync --extra dev
 ```
 
 ## Running Tests
