@@ -26,8 +26,10 @@ SCHEMA_DIR = Path(__file__).resolve().parent / "schemas" / "agent-plugins-1.0.0"
 PLUGIN_SCHEMA_ID = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
 MCP_SCHEMA_ID = "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"
 
-# Tools that only read notebooks. Everything else can modify or delete content.
-READ_ONLY_TOOLS = {
+# Deliberately conservative persistent-approval allowlist. Each of these only
+# reads a notebook, but the set is not a full side-effect classification: some
+# unlisted tools also only read and still stay prompt-gated.
+CONSERVATIVE_ALLOWLIST = {
     "ipynb_read_notebook",
     "ipynb_list_cells",
     "ipynb_get_cell",
@@ -67,7 +69,7 @@ def _frontmatter(skill_md: Path) -> tuple[dict, str]:
 
 
 def _server_tool_names() -> set[str]:
-    return set(asyncio.run(server.mcp.get_tools()).keys())
+    return {tool.name for tool in asyncio.run(server.mcp.list_tools())}
 
 
 @pytest.fixture(scope="module")
@@ -160,7 +162,7 @@ def test_skills_follow_agent_skills_spec():
 
 def test_skill_documents_exactly_the_server_tools():
     server_tools = _server_tool_names()
-    assert READ_ONLY_TOOLS <= server_tools
+    assert CONSERVATIVE_ALLOWLIST <= server_tools
     documented: set[str] = set()
     for skill_dir in _skill_dirs():
         documented |= set(re.findall(r"`(ipynb_[a-z_]+)`", (skill_dir / "SKILL.md").read_text(encoding="utf-8")))
@@ -171,6 +173,16 @@ def test_skill_keeps_safety_boundaries():
     _, body = _frontmatter(PLUGIN_ROOT / "skills" / "notebook-editing" / "SKILL.md")
     assert "Executing notebook cells" in body
     assert "non-.ipynb files" in body
+    assert "Use these tools only with local `.ipynb` files" in body
+    assert "never executes code" in body
     section = body.split("## Safety Boundaries", 1)[1].split("\n## ", 1)[0]
-    read_only_line = next(line for line in section.splitlines() if line.startswith("- Read-only tools:"))
-    assert set(re.findall(r"`(ipynb_[a-z_]+)`", read_only_line)) == READ_ONLY_TOOLS
+    allowlist_line = next(
+        line for line in section.splitlines() if line.startswith("- Recommended persistent approvals:")
+    )
+    assert set(re.findall(r"`(ipynb_[a-z_]+)`", allowlist_line)) == CONSERVATIVE_ALLOWLIST
+
+
+def test_install_permissions_rule_matches_allowlist():
+    install = (REPO_ROOT / "INSTALL.md").read_text(encoding="utf-8")
+    allowed = set(re.findall(r'"<server>/(ipynb_[a-z_]+)"', install))
+    assert allowed == CONSERVATIVE_ALLOWLIST

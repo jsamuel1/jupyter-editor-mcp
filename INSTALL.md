@@ -109,7 +109,7 @@ Add to `.vscode/settings.json`:
 - **From GitHub:** Kiro Powers panel → **Add Custom Power** → **Import power from GitHub** → `https://github.com/jsamuel1/jupyter-editor-mcp`.
 - **From a local clone:** **Add Custom Power** → **Import power from a folder** → select the `power/` directory.
 
-The portable `mcp.json` format has no `autoApprove` field, so the plugin does not pre-approve any tool. Kiro asks before each tool call until you allow it. To skip prompts for the read-only tools only, add rules to `~/.kiro/settings/permissions.yaml`. Kiro namespaces a power's MCP server (for example `power-jupyter-editor-jupyter-editor`), so check the server name Kiro shows and use it in place of `<server>`:
+The portable `mcp.json` format has no `autoApprove` field, so the plugin does not pre-approve any tool. Kiro asks before each tool call until you allow it. To skip prompts for a small, conservative set of five tools that only read notebooks, add rules to `~/.kiro/settings/permissions.yaml`. Kiro namespaces a power's MCP server (for example `power-jupyter-editor-jupyter-editor`), so check the server name Kiro shows and use it in place of `<server>`:
 
 ```yaml
 rules:
@@ -123,7 +123,7 @@ rules:
     effect: allow
 ```
 
-Do not allow the write, delete, batch, or multi-notebook tools this way. They change notebook files.
+Keep every other tool prompt-gated. A few unlisted tools also only read, but the list stays at these five so that no tool that writes, deletes, or creates notebook files is approved by a broad rule.
 
 If you installed the earlier `POWER.md` version of this power, uninstall it and install it again. Both versions use the plugin name `jupyter-editor`, but Kiro now manages the MCP server inside the power and no longer adds it to `~/.kiro/settings/mcp.json`.
 

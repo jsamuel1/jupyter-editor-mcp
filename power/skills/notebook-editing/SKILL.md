@@ -35,10 +35,10 @@ Do NOT use this skill for:
 
 ## Safety Boundaries
 
-- These tools only read and write local `.ipynb` files. They never execute code, start a kernel, or contact a network service.
-- Never use these tools to edit files that are not Jupyter notebooks; use ordinary file tools for those.
-- Read-only tools: `ipynb_read_notebook`, `ipynb_list_cells`, `ipynb_get_cell`, `ipynb_search_cells`, `ipynb_get_notebook_info`. Prefer them first to understand a notebook.
-- Every other tool can modify or delete notebook content (including batch and multi-notebook tools such as `ipynb_delete_cells_batch`, `ipynb_filter_cells`, `ipynb_apply_to_notebooks`). Confirm the target file, indices, and intent with the user before calling them, and expect the client to ask for approval.
+- Use these tools only with local `.ipynb` files. The server parses and writes notebook JSON at whatever path it is given and does not check the file extension, so never point it at a file that is not a Jupyter notebook; use ordinary file tools for those.
+- The server never executes code, starts a kernel, or contacts a network service.
+- Recommended persistent approvals: `ipynb_read_notebook`, `ipynb_list_cells`, `ipynb_get_cell`, `ipynb_search_cells`, `ipynb_get_notebook_info`. These five only read a notebook. They are a deliberately small allowlist, not a complete list of the tools without side effects. Prefer them first to understand a notebook.
+- Every other tool stays prompt-gated. A few of them also only read (for example `ipynb_get_metadata` and `ipynb_validate_notebook`), but most write, delete, or create notebook files, including batch and multi-notebook tools such as `ipynb_delete_cells_batch`, `ipynb_filter_cells`, and `ipynb_apply_to_notebooks`. Before calling a tool that changes files, confirm the target file, indices, and intent with the user, and expect the client to ask for approval.
 
 ## Prerequisites
 
