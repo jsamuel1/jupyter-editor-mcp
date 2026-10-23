@@ -423,12 +423,14 @@ jupyter-editor/
 - Requires Python >= 3.10 (for type hints with `|` syntax)
 
 ### 6.2 Core Dependencies
-- `fastmcp >= 0.1.0` - MCP server framework
-- `nbformat >= 5.10.0` - Jupyter notebook format library
+- `fastmcp >= 4.1.3, < 5` - MCP server framework (built on MCP Python SDK v2)
+- `nbformat >= 5.11.1, < 6` - Jupyter notebook format library
 
 ### 6.3 Development Dependencies
-- `pytest >= 7.0.0` - Testing framework
-- `pytest-asyncio >= 0.21.0` - Async test support
+- `mcp >= 2.3.0, < 3` - MCP client used by the transport tests
+- `pytest >= 9.1.1` - Testing framework
+- `pytest-asyncio >= 1.4.0` - Async test support
+- `pytest-cov >= 7.1.0` - Coverage
 
 ### 6.4 Installation
 

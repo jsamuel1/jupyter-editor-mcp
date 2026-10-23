@@ -1,5 +1,23 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+- Upgraded `fastmcp` 2.14.2 → 4.1.3 (MCP Python SDK 1.25.0 → 2.3.0); pinned `fastmcp>=4.1.3,<5`. The released 0.2.2 floor (`fastmcp>=0.1.0`) already resolves 4.x for fresh `uvx` installs, so this makes the tested version explicit
+- Upgraded `nbformat` 5.10.4 → 5.11.1 (`>=5.11.1,<6`)
+- Upgraded dev/build tooling: pytest 9.1.1, pytest-asyncio 1.4.0, pytest-cov 7.1.0, build 1.6.1, twine 7.0.0, hatchling ≥1.32; `mcp>=2.3.0,<3` declared in `dev` because the transport tests import it directly
+- Publish workflow actions: `actions/checkout` v7, `actions/setup-python` v7, `astral-sh/setup-uv` v10 (Node 24 runtimes)
+- Index-shift guidance for `ipynb_insert_cell`, `ipynb_delete_cell`, `ipynb_insert_cells_batch` and `ipynb_delete_cells_batch` moved from `Note:` sections into the tool description, because FastMCP 4 only exposes a docstring's leading prose to clients
+- Server instructions state the `'error'`-key failure convention, since FastMCP 4 no longer includes `Returns:` text in tool descriptions
+- Classifiers list Python 3.13 and 3.14 (full suite passes on 3.10–3.14)
+
+### Fixed
+- `uv run pytest` (the documented command) no longer fails with `ModuleNotFoundError: No module named 'src'`; pytest now adds the repository root to `sys.path`
+- HTTP transport tests unpack the 2-tuple that MCP SDK 2's `streamable_http_client` yields
+
+### Added
+- `tests/test_tool_contract.py`: pins the tool set, per-parameter descriptions, index-shift guidance, unknown-argument rejection, error-dict convention, and project-scope enforcement through the MCP layer
+
 ## [0.2.2] - 2026-01-16
 
 ### Changed

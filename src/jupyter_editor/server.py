@@ -29,6 +29,8 @@ Use these tools instead of JSON editors or file read/write operations to avoid b
 
 Capabilities: read, modify cells, batch operations, search/replace, metadata management, validation.
 
+Every tool returns a dict; on failure the dict contains an 'error' key describing the problem.
+
 Best Practice: Prompt users to clear notebook outputs using clear_outputs() before committing to git to prevent information leakage, reduce file size, and avoid merge conflicts."""
 )
 
@@ -144,6 +146,8 @@ def ipynb_replace_cell(ipynb_filepath: str, cell_index: int, new_content: str) -
 @mcp.tool
 def ipynb_insert_cell(ipynb_filepath: str, cell_index: int, content: str, cell_type: str = "code") -> dict:
     """Insert new cell at specified position in a Jupyter Notebook (.ipynb).
+
+    Indices of cells at or after the insertion point will shift by +1.
     
     Args:
         ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
@@ -153,9 +157,6 @@ def ipynb_insert_cell(ipynb_filepath: str, cell_index: int, content: str, cell_t
         
     Returns:
         Dict with 'success' and 'new_cell_count' or 'error' key
-        
-    Note:
-        Indices of cells at or after the insertion point will shift by +1
     """
     try:
         operations.insert_cell(ipynb_filepath, cell_index, content, cell_type)
@@ -197,6 +198,8 @@ def ipynb_append_cell(ipynb_filepath: str, content: str, cell_type: str = "code"
 @mcp.tool
 def ipynb_delete_cell(ipynb_filepath: str, cell_index: int) -> dict:
     """Delete cell at specified index in a Jupyter Notebook (.ipynb).
+
+    Indices of cells after the deleted cell will shift by -1.
     
     Args:
         ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
@@ -204,9 +207,6 @@ def ipynb_delete_cell(ipynb_filepath: str, cell_index: int) -> dict:
         
     Returns:
         Dict with 'success' and 'new_cell_count' or 'error' key
-        
-    Note:
-        Indices of cells after the deleted cell will shift by -1
     """
     try:
         operations.delete_cell(ipynb_filepath, cell_index)
@@ -352,6 +352,9 @@ def ipynb_replace_cells_batch(ipynb_filepath: str, replacements: list[dict]) -> 
 @mcp.tool
 def ipynb_delete_cells_batch(ipynb_filepath: str, cell_indices: list[int]) -> dict:
     """Delete multiple cells by indices from a Jupyter Notebook (.ipynb).
+
+    Deletions are processed in descending order to maintain index validity.
+    Provide indices as they appear before any deletions occur.
     
     Args:
         ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
@@ -359,10 +362,6 @@ def ipynb_delete_cells_batch(ipynb_filepath: str, cell_indices: list[int]) -> di
         
     Returns:
         Dict with 'success', 'cells_deleted', 'new_cell_count' or 'error' key
-        
-    Note:
-        Deletions are processed in descending order to maintain index validity.
-        Provide indices as they appear before any deletions occur.
     """
     try:
         operations.delete_cells_batch(ipynb_filepath, cell_indices)
@@ -379,6 +378,10 @@ def ipynb_delete_cells_batch(ipynb_filepath: str, cell_indices: list[int]) -> di
 @mcp.tool
 def ipynb_insert_cells_batch(ipynb_filepath: str, insertions: list[dict]) -> dict:
     """Insert multiple cells at specified positions in a Jupyter Notebook (.ipynb).
+
+    Uses 0-based indexing. Insertions are processed in order, so later indices
+    will be affected by earlier insertions. Consider sorting by index descending
+    to maintain intended positions.
     
     Args:
         ipynb_filepath: Path to Jupyter Notebook (.ipynb) file (absolute path preferred)
@@ -387,11 +390,6 @@ def ipynb_insert_cells_batch(ipynb_filepath: str, insertions: list[dict]) -> dic
         
     Returns:
         Dict with 'success' and 'cells_inserted' or 'error' key
-        
-    Note:
-        Uses 0-based indexing. Insertions are processed in order, so later indices
-        will be affected by earlier insertions. Consider sorting by index descending
-        to maintain intended positions.
     """
     try:
         operations.insert_cells_batch(ipynb_filepath, insertions)

@@ -159,7 +159,7 @@ class TestMCPTransports:
         
         url = f"http://{http_harness.host}:{http_harness.port}{http_harness.path}"
         
-        async with streamable_http_client(url) as (read, write, _):
+        async with streamable_http_client(url) as (read, write):
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 tools = await session.list_tools()
@@ -185,7 +185,7 @@ class TestMCPTransports:
             
             url = f"http://{harness.host}:{harness.port}{harness.path}"
             
-            async with streamable_http_client(url) as (read, write, _):
+            async with streamable_http_client(url) as (read, write):
                 async with ClientSession(read, write) as session:
                     await session.initialize()
                     tools = await session.list_tools()
@@ -207,7 +207,7 @@ class TestMCPTransports:
             
             url = f"http://{harness.host}:{harness.port}{harness.path}"
             
-            async with streamable_http_client(url) as (read, write, _):
+            async with streamable_http_client(url) as (read, write):
                 async with ClientSession(read, write) as session:
                     await session.initialize()
                     tools = await session.list_tools()
