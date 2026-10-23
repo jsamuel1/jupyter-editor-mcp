@@ -174,7 +174,11 @@ export PATH="$HOME/.local/bin:$PATH"
 Ensure all dependencies are installed:
 
 ```bash
-uv add nbformat fastmcp
+# Tool install: reinstall to pull dependencies
+uv tool install --force jupyter-editor-mcp
+
+# Source checkout: sync the project environment
+uv sync --extra dev
 ```
 
 ### MCP server not connecting

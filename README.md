@@ -30,8 +30,7 @@ jupyter-editor-mcp
 ```bash
 git clone https://github.com/jsamuel1/jupyter-editor-mcp.git
 cd jupyter-editor-mcp
-uv venv
-uv pip install -e ".[dev]"
+uv sync --extra dev
 ```
 
 See [INSTALL.md](INSTALL.md) for detailed configuration options.
@@ -108,7 +107,7 @@ pytest
 pytest --cov
 
 # Install in development mode
-uv pip install -e ".[dev]"
+uv sync --extra dev
 ```
 
 ## Documentation
