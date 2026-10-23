@@ -65,7 +65,15 @@ def _frontmatter(skill_md: Path) -> tuple[dict, str]:
     text = skill_md.read_text(encoding="utf-8")
     match = re.match(r"^---\n(.*?)\n---\n(.*)$", text, re.S)
     assert match, f"{skill_md} has no YAML frontmatter"
-    return yaml.safe_load(match.group(1)), match.group(2)
+    meta = yaml.safe_load(match.group(1))
+    assert isinstance(meta, dict), f"{skill_md} frontmatter is not a YAML mapping"
+    return meta, match.group(2)
+
+
+def _section(body: str, heading: str) -> str:
+    marker = f"## {heading}"
+    assert marker in body, f"SKILL.md missing '{marker}' section"
+    return body.split(marker, 1)[1].split("\n## ", 1)[0]
 
 
 def _server_tool_names() -> set[str]:
@@ -149,6 +157,8 @@ def test_skills_follow_agent_skills_spec():
         assert skill_md.is_file(), f"{skill_dir} has no SKILL.md"
         meta, body = _frontmatter(skill_md)
         assert set(meta) <= SKILL_FRONTMATTER_KEYS, f"unknown frontmatter keys: {set(meta) - SKILL_FRONTMATTER_KEYS}"
+        assert "name" in meta, f"{skill_md} frontmatter missing 'name'"
+        assert "description" in meta, f"{skill_md} frontmatter missing 'description'"
         name = meta["name"]
         assert name == skill_dir.name
         assert len(name) <= 64 and SKILL_NAME_RE.match(name) and "--" not in name
@@ -156,6 +166,7 @@ def test_skills_follow_agent_skills_spec():
         if "compatibility" in meta:
             assert isinstance(meta["compatibility"], str) and len(meta["compatibility"]) <= 500
         if "metadata" in meta:
+            assert isinstance(meta["metadata"], dict), "metadata must be a mapping"
             assert all(isinstance(k, str) and isinstance(v, str) for k, v in meta["metadata"].items())
         assert body.strip()
 
@@ -175,10 +186,12 @@ def test_skill_keeps_safety_boundaries():
     assert "non-.ipynb files" in body
     assert "Use these tools only with local `.ipynb` files" in body
     assert "never executes code" in body
-    section = body.split("## Safety Boundaries", 1)[1].split("\n## ", 1)[0]
+    section = _section(body, "Safety Boundaries")
     allowlist_line = next(
-        line for line in section.splitlines() if line.startswith("- Recommended persistent approvals:")
+        (line for line in section.splitlines() if line.startswith("- Recommended persistent approvals:")),
+        None,
     )
+    assert allowlist_line is not None, "Safety Boundaries section missing '- Recommended persistent approvals:' line"
     assert set(re.findall(r"`(ipynb_[a-z_]+)`", allowlist_line)) == CONSERVATIVE_ALLOWLIST
 
 
