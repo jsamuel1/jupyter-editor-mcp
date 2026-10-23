@@ -36,6 +36,21 @@ uv pip install -e ".[dev]"
 
 See [INSTALL.md](INSTALL.md) for detailed configuration options.
 
+### As a Kiro Power (Agent Plugin)
+
+The [`power/`](power/) directory is an [Agent Plugins](https://agent-plugins.org) 1.0.0 package, the format Kiro powers use:
+
+```text
+power/
+├── plugin.json                    # manifest (name, version, author, keywords)
+├── mcp.json                       # runs `uvx jupyter-editor-mcp` over stdio
+└── skills/
+    └── notebook-editing/
+        └── SKILL.md               # tool guide, workflows, safety boundaries
+```
+
+In Kiro: Powers panel → **Add Custom Power** → **Import power from GitHub** and enter `https://github.com/jsamuel1/jupyter-editor-mcp`, or clone the repository and use **Import power from a folder** with the `power/` directory. See [INSTALL.md](INSTALL.md#kiro-power-agent-plugin) for tool-approval settings.
+
 ## Usage
 
 ### With Claude Desktop

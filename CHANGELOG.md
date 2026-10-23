@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Changed
+- Migrated the Kiro power in `power/` from the legacy `POWER.md` format to the [Agent Plugins](https://agent-plugins.org) 1.0.0 standard: `plugin.json` manifest, spec-format `mcp.json` (`type: stdio`, still `uvx jupyter-editor-mcp`), and the guide moved to `skills/notebook-editing/SKILL.md`
+- Power author is now Joshua Samuel (`sauhsoj@amazon.com`, GitHub `jsamuel1`), replacing the `Kiro User` placeholder
+- The power no longer auto-approves read-only tools: the portable `mcp.json` format has no `autoApprove` field. INSTALL.md shows how to allow only the read-only tools with Kiro permissions
 - Upgraded `fastmcp` 2.14.2 → 4.1.3 (MCP Python SDK 1.25.0 → 2.3.0); pinned `fastmcp>=4.1.3,<5`. The released 0.2.2 floor (`fastmcp>=0.1.0`) already resolves 4.x for fresh `uvx` installs, so this makes the tested version explicit
 - Upgraded `nbformat` 5.10.4 → 5.11.1 (`>=5.11.1,<6`)
 - Upgraded dev/build tooling: pytest 9.1.1, pytest-asyncio 1.4.0, pytest-cov 7.1.0, build 1.6.1, twine 7.0.0, hatchling ≥1.32; `mcp>=2.3.0,<3` declared in `dev` because the transport tests import it directly
@@ -16,6 +19,7 @@
 - HTTP transport tests unpack the 2-tuple that MCP SDK 2's `streamable_http_client` yields
 
 ### Added
+- `tests/test_plugin_package.py` validates the plugin against the vendored Agent Plugins 1.0.0 schemas and the Agent Skills rules, and checks the skill documents exactly the server's tools
 - `tests/test_tool_contract.py`: pins the tool set, per-parameter descriptions, index-shift guidance, unknown-argument rejection, error-dict convention, and project-scope enforcement through the MCP layer
 
 ## [0.2.2] - 2026-01-16

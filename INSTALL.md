@@ -102,6 +102,31 @@ Add to `.vscode/settings.json`:
 }
 ```
 
+### Kiro Power (Agent Plugin)
+
+`power/` is an [Agent Plugins](https://agent-plugins.org) 1.0.0 package: `plugin.json` (manifest), `mcp.json` (stdio server `uvx jupyter-editor-mcp`), and `skills/notebook-editing/SKILL.md` (usage guide). It needs `uvx` on PATH; nothing else to install.
+
+- **From GitHub:** Kiro Powers panel → **Add Custom Power** → **Import power from GitHub** → `https://github.com/jsamuel1/jupyter-editor-mcp`.
+- **From a local clone:** **Add Custom Power** → **Import power from a folder** → select the `power/` directory.
+
+The portable `mcp.json` format has no `autoApprove` field, so the plugin does not pre-approve any tool. Kiro asks before each tool call until you allow it. To skip prompts for the read-only tools only, add rules to `~/.kiro/settings/permissions.yaml`. Kiro namespaces a power's MCP server (for example `power-jupyter-editor-jupyter-editor`), so check the server name Kiro shows and use it in place of `<server>`:
+
+```yaml
+rules:
+  - capability: mcp
+    match:
+      - "<server>/ipynb_read_notebook"
+      - "<server>/ipynb_list_cells"
+      - "<server>/ipynb_get_cell"
+      - "<server>/ipynb_search_cells"
+      - "<server>/ipynb_get_notebook_info"
+    effect: allow
+```
+
+Do not allow the write, delete, batch, or multi-notebook tools this way. They change notebook files.
+
+If you installed the earlier `POWER.md` version of this power, uninstall it and install it again. Both versions use the plugin name `jupyter-editor`, but Kiro now manages the MCP server inside the power and no longer adds it to `~/.kiro/settings/mcp.json`.
+
 ## Updating
 
 ### Tool Installation

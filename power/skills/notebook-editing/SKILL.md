@@ -1,9 +1,13 @@
 ---
-name: "jupyter-editor"
-displayName: "Jupyter Editor MCP"
-description: "Edit Jupyter Notebooks (.ipynb) programmatically. Read, create, modify cells, manage metadata, and perform batch operations on notebooks without needing a running Jupyter server."
-keywords: ["jupyter", "notebook", "ipynb", "python", "data-science", "cells", "markdown"]
-author: "Kiro User"
+name: notebook-editing
+description: Edit Jupyter Notebooks (.ipynb) with the jupyter-editor MCP tools - read, insert, replace, delete, search, batch-edit, merge, split, validate, and manage metadata without a running Jupyter server. Use when the user asks to inspect or change a .ipynb file, refactor notebook cells, clean outputs before a commit, or standardise kernels and metadata across notebooks.
+license: MIT
+compatibility: Requires the jupyter-editor MCP server bundled with this plugin (Python 3.10+ and uvx on PATH). Local .ipynb files only; no network or Jupyter server.
+metadata:
+  author: Joshua Samuel
+  github: jsamuel1
+  email: sauhsoj@amazon.com
+  version: "1.0.0"
 ---
 
 # Jupyter Editor MCP
@@ -12,7 +16,7 @@ author: "Kiro User"
 
 The Jupyter Editor MCP server enables AI coding assistants to work directly with Jupyter Notebook files (.ipynb) without requiring a running Jupyter server. This is essential for programmatic notebook manipulation, batch operations, and integrating notebook editing into automated workflows.
 
-## When to Use This Power
+## When to Use This Skill
 
 Use the Jupyter Editor MCP when you need to:
 
@@ -23,22 +27,25 @@ Use the Jupyter Editor MCP when you need to:
 - Merge, split, or reorganize notebooks
 - Validate notebook structure and format
 
-Do NOT use this power for:
+Do NOT use this skill for:
 
 - Executing notebook cells (use a Jupyter kernel instead)
 - Real-time collaborative editing
 - Working with non-.ipynb files
 
-## Onboarding
+## Safety Boundaries
 
-### Prerequisites
+- These tools only read and write local `.ipynb` files. They never execute code, start a kernel, or contact a network service.
+- Never use these tools to edit files that are not Jupyter notebooks; use ordinary file tools for those.
+- Read-only tools: `ipynb_read_notebook`, `ipynb_list_cells`, `ipynb_get_cell`, `ipynb_search_cells`, `ipynb_get_notebook_info`. Prefer them first to understand a notebook.
+- Every other tool can modify or delete notebook content (including batch and multi-notebook tools such as `ipynb_delete_cells_batch`, `ipynb_filter_cells`, `ipynb_apply_to_notebooks`). Confirm the target file, indices, and intent with the user before calling them, and expect the client to ask for approval.
 
-- Python 3.10+ with `uv` or `uvx` available
-- Kiro with MCP Support configured
+## Prerequisites
 
-### Installation
+- Python 3.10+ with `uv` / `uvx` available on PATH
+- An Agent Plugins compatible client (for example Kiro) with this plugin installed
 
-The Jupyter Editor MCP server is automatically configured when you install this power. No additional installation steps required.
+The Jupyter Editor MCP server is configured by the plugin's `mcp.json` (`uvx jupyter-editor-mcp`). No additional installation steps are required.
 
 ## Tool Selection Guide
 
