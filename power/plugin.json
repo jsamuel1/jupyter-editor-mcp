@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "jupyter-editor",
+  "version": "1.0.0",
+  "description": "Jupyter Editor MCP: edit Jupyter Notebooks (.ipynb) programmatically. Read, create, modify cells, manage metadata, and perform batch operations on notebooks without needing a running Jupyter server.",
+  "author": {
+    "name": "Joshua Samuel",
+    "email": "sauhsoj@amazon.com",
+    "url": "https://github.com/jsamuel1"
+  },
+  "homepage": "https://github.com/jsamuel1/jupyter-editor-mcp#readme",
+  "repository": "https://github.com/jsamuel1/jupyter-editor-mcp",
+  "license": "MIT",
+  "keywords": ["jupyter", "notebook", "ipynb", "python", "data-science", "cells", "markdown"]
+}
