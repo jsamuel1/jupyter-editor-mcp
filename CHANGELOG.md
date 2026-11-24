@@ -15,6 +15,7 @@
 - Classifiers list Python 3.13 and 3.14 (full suite passes on 3.10–3.14)
 
 ### Fixed
+- Writing to an existing notebook no longer fails on Windows with `FileExistsError` (WinError 183), which broke every write tool there and left `<notebook>.ipynb.tmp` behind: `write_notebook_file` now moves the temp file into place with `Path.replace`, and removes it if the write fails
 - `uv run pytest` (the documented command) no longer fails with `ModuleNotFoundError: No module named 'src'`; pytest now adds the repository root to `sys.path`
 - HTTP transport tests unpack the 2-tuple that MCP SDK 2's `streamable_http_client` yields
 
