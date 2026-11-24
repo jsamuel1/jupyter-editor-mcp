@@ -25,6 +25,34 @@ def test_write_notebook_file(temp_notebook_file, simple_notebook):
     assert len(nb['cells']) == 3
 
 
+def test_write_notebook_file_overwrites_existing(tmp_path, simple_notebook):
+    """Overwriting an existing notebook works on every OS and leaves no temp file."""
+    filepath = tmp_path / "nb.ipynb"
+    operations.write_notebook_file(str(filepath), simple_notebook)
+    simple_notebook['cells'].append(nbformat.v4.new_markdown_cell("second write"))
+    operations.write_notebook_file(str(filepath), simple_notebook)
+    nb = operations.read_notebook_file(str(filepath))
+    assert nb['cells'][-1]['source'] == "second write"
+    assert list(tmp_path.iterdir()) == [filepath]
+
+
+def test_write_notebook_file_removes_temp_on_failure(tmp_path, simple_notebook, monkeypatch):
+    """A failed replace keeps the original notebook and removes the temp file."""
+    filepath = tmp_path / "nb.ipynb"
+    operations.write_notebook_file(str(filepath), simple_notebook)
+    original = filepath.read_text(encoding='utf-8')
+
+    def fail_replace(self, target):
+        raise PermissionError("file locked")
+
+    monkeypatch.setattr(operations.Path, "replace", fail_replace)
+    simple_notebook['cells'].append(nbformat.v4.new_markdown_cell("lost"))
+    with pytest.raises(PermissionError):
+        operations.write_notebook_file(str(filepath), simple_notebook)
+    assert filepath.read_text(encoding='utf-8') == original
+    assert list(tmp_path.iterdir()) == [filepath]
+
+
 def test_get_notebook_summary(temp_notebook_file):
     """Test US-001: Read Notebook Structure."""
     summary = operations.get_notebook_summary(temp_notebook_file)

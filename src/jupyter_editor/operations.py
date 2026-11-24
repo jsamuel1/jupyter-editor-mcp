@@ -73,10 +73,16 @@ def write_notebook_file(filepath: str, nb: nbformat.NotebookNode) -> None:
     """
     path = _validate_filepath(filepath)
     nbformat.validate(nb)
-    temp_path = f"{path}.tmp"
-    with open(temp_path, 'w', encoding='utf-8') as f:
-        nbformat.write(nb, f)
-    Path(temp_path).rename(path)
+    temp_path = path.with_name(f"{path.name}.tmp")
+    try:
+        with open(temp_path, 'w', encoding='utf-8') as f:
+            nbformat.write(nb, f)
+        # Path.replace overwrites atomically on every platform; Path.rename
+        # raises FileExistsError on Windows when the notebook already exists.
+        temp_path.replace(path)
+    except BaseException:
+        temp_path.unlink(missing_ok=True)
+        raise
 
 
 def get_notebook_summary(filepath: str) -> dict:
